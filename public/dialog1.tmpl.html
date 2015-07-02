@@ -1,0 +1,42 @@
+
+<md-dialog aria-label="Add to Setlist"  flex="30" >
+  
+   <!--header-->
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Add Songs to Setlist</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon class="glyphicon glyphicon-close"  aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <!--content-->  
+  <md-dialog-content >
+  <form id="formEntry">  
+    <div layout="row">
+      <md-input-container layout="column" flex="90">
+        <label>New Setlist</label>
+        <input required ng-model="setlistName" >
+      </md-input-container>
+      <div layout="column">
+        <md-icon class="glyphicon glyphicon-plus"  ng-disabled="!formEntry" ng-click="modalAddtoNewSetlist()" ></md-icon>
+      </div>
+    </div>
+    
+    <span data-ng-repeat="setlist in items" ng-click="modalAddToExistingSetlist(setlist)" class="list-group-item">
+      {{setlist.name}}  
+   </span>
+  </form>     
+  </md-dialog-content>
+  
+  <!--footer-->
+  <div class="md-actions" layout="row">
+    <md-button ng-click="cancel()" class="md-primary">
+      Cancel
+    </md-button>
+  </div>
+
+</md-dialog>
+

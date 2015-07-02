@@ -1,0 +1,229 @@
+.content {
+	margin-top: 50px;
+}
+.undecorated-link:hover {
+	text-decoration: none;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+.ng-invalid.ng-dirty {
+	border-color: #FA787E;
+}
+.ng-valid.ng-dirty {
+	border-color: #78FA89;
+}
+
+.lyricLine{
+  font-family: inherit;
+    font-size: 18px;
+    display: block;
+}
+
+.lyricLineSpace{
+  display: inline;
+ }
+
+ .lyricLineSpace:before {
+    content: "\a ";
+    white-space: pre;
+ }
+
+.mfb-component__button--main, .mfb-component__button--child {
+  background-color: #000000;
+  color: #f1f1f1; }
+
+
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-canvas {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+
+
+
+
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid ;
+  border-radius: 0; 
+
+}
+
+.alert h4 {
+    margin-top: 0;
+    color: inherit; }
+
+.alert .alert-link {
+    font-weight: bold; }
+
+.alert > p, .alert > ul {
+    margin-bottom: 0; }
+
+.alert > p + p {
+    margin-top: 5px; 
+}
+
+.alert.top-right {
+  position: fixed;
+  top: 40px;
+  right: 20px;
+  margin: 20px;
+  z-index: 1050;
+  outline: none; 
+}
+
+.alert.top-right .close {
+    padding-left: 10px; 
+}
+
+
+.alert-success {
+  background-color: #60c060;
+  border-color: #55bc55;
+  color: #fff;
+ 
+   }
+  .alert-success hr {
+    border-top-color: #46b146; }
+  .alert-success .alert-link {
+    color: #e6e6e6; }
+
+.alert-info {
+  background-color: #e5f7fd;
+  border-color: #bcf8f3;
+  color: #25484e; }
+  .alert-info hr {
+    border-top-color: #a5f6ef; }
+  .alert-info .alert-link {
+    color: #15282b; }
+
+.alert-warning {
+  background-color: #faebcc;
+  border-color: #faebcc;
+  color: #8a6d3b; }
+  .alert-warning hr {
+    border-top-color: #f7e1b5; }
+  .alert-warning .alert-link {
+    color: #66512c; }
+
+.alert-danger {
+  background-color: #b30015;
+  border-color: #a40013;
+  color: #fff; }
+  .alert-danger hr {
+    border-top-color: #8a0010; }
+  .alert-danger .alert-link {
+    color: #e6e6e6; }
+
+/*/ customAlert */
+.alert.customAlert {
+    background-color: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #666;
+    min-width: 400px;
+    padding : 20px 50px 20px 30px;
+    position: fixed;
+    right: 20px;
+    top: 51px;
+    z-index: 9999;
+    height: 50px;
+}
+
+.customAlert strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+.customAlert .close {
+    position: absolute !important;
+    right: 15px !important;
+    top: 5px !important;
+}
+.customAlert em {
+    color: #999;
+    display: inline-block;
+    margin: 0 5px;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: pre;
+}
+
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-canvas {
+      background: white; }
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; }
+
+
+.jumbotron-m {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  color: #fff;
+  background-color: #428bca;
+}
+.jumbotron-m h1,
+.jumbotron-m .h1 {
+  color: #fff;
+}
+.jumbotron-m p {
+  margin-bottom: 10px;
+  font-size: 21px;
+  font-weight: 200;
+  color:#fff;
+}
+.jumbotron-m > hr {
+  border-top-color: #fff;
+}
+.container .jumbotron-m,
+.container-fluid .jumbotron-m {
+  border-radius: 0px;
+}
+.jumbotron-m .container {
+  max-width: 100%;
+}
+@media screen and (min-width: 768px) {
+  .jumbotron-m {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .container .jumbotron-m,
+  .container-fluid .jumbotron-m {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .jumbotron-m h1,
+  .jumbotron-m .h1 {
+    font-size: 36px;
+    font-weight: 500;
+  }
+  .jumbotron-m h2,
+  .jumbotron-m .h2 {
+    color:#fff;
+  }
+  .jumbotron-m h3,
+  .jumbotron-m .h3 {
+    font-size: 24px;
+    color:#fff;
+  }
+}
+/*
+.as-sortable-item, .as-sortable-placeholder {
+   display: block;
+}*/

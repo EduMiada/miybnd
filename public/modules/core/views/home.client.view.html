@@ -1,0 +1,74 @@
+<section data-ng-controller="HomeController">
+
+		<!-- ==== HEADERWRAP ==== -->
+		<div id="headerwrap" id="home" name="home" data-ng-controller="SongsController">			
+			<div cg-busy="{promise:myPromise,message:'Adding song, please wait...',backdrop:false,delay:300,minDuration:700}"></div>		
+			<div flash-message="5000" ></div>
+
+			<fieldset data-ng-init="addStatus='Unrated'" >
+
+			<header class="clearfix">
+	  		 		<p>Start by adding some songs and rate</p>
+	  		 		<p>your band´s mate suggestions.</p>
+	  		</header>	    
+			  
+			  	<div class="tab-pane active" id="tab1"  > <!--TAB MUSIXMATCH -->
+						<div class="row">					
+						  <div class="col-md-4 col-md-offset-4">
+						    <div class="input-group">
+								<input  type="text"  ng-model="asyncSelected" placeholder="Search Musixmatch catalog typing artist and song name" 
+												typeahead="track.artist_name + ' ' + track.track_name as track.artist_name + ' - ' + track.track_name + ' - ' + track.album_name for track  in searchMusixMatch($viewValue)" 
+												typeahead-loading="loadingLocations" class="form-control"   typeahead-on-select='onSelect($item, $model, $label)'  
+												typeahead-editable="false"
+												typeahead-min-length="3" typeahead-wait-ms="1">
+									
+						      <span class="input-group-btn">
+						        <button class="btn btn-success"  type="button" ng-click="addFromMusixmatch()"  ng-disabled="!asyncSelected" ><span class="glyphicon glyphicon-ok"></span></button>
+						      </span>
+
+
+						    </div><!-- /input-group -->
+						  </div><!-- /.col-lg-6 -->
+						</div><!-- /.row -->
+
+			    	</div> <!--FIM TAB MUSIXMATCH -->
+			  
+			  
+			  
+	    </div><!-- /headerwrap -->
+		
+		<section data-ng-show="authentication.user" data-ng-controller="SongsController"  >
+			<section data-ng-init="find()"></section>
+			
+			<!-- ==== GREYWRAP ==== | limitTo:3-->
+			<div id="greywrap">
+				<div class="row">
+					<div class="col-md-4 callout" ng-repeat="song in unratedSongs.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | orderBy:-created  ">
+						<img class="img img-circle" ng-src="{{song.song_image}}"> 
+						<h4><b>{{song.name}}</b></h4>
+						{{song.artist}}<br/>
+						<rating ng-model="rate"  id="{{song._id}}"  max="max" readonly="false" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating>
+						<br/>
+						 
+						<span class="glyphicon glyphicon-ok" ng-click="rateSong('{{song._id}}', rate )" role="button" popover="Rate with {{rate}} stars" popover-trigger="mouseenter" popover-placement="bottom"></span> &nbsp;&nbsp;
+						<span class="glyphicon glyphicon-ban-circle" ng-click="rateSong('{{song._id}}',-1)" role="button" popover="Reject if you don´t want to play" popover-trigger="mouseenter" popover-placement="bottom" ></span> 						
+					</div><!-- col-lg-4 -->
+				</div><!-- row -->
+				<!--list pager-->
+				<pager total-items="unratedSongs.length" data-ng-hide="!unratedSongs.length" ng-model="currentPage" items-per-page="itemsPerPage"></pager>
+					
+				<div class="row white centered" data-ng-hide="!unratedSongs.$resolved || unratedSongs.length">
+					<h1 class="centered">Well done! You have rated all songs.</h1>
+					<p/><p/>
+			    </div>
+				
+			</div><!-- greywrap -->
+		</section>
+		
+
+	<div id="footerwrap">
+		<div class="container">
+			<h4>MIYBND Repertoire and Setlist manager</h4>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,68 @@
+<section class="container" data-ng-controller="SongsController" data-ng-init="find()">
+     <div class="jumbotron-m" > 
+        <h2>Repertoire
+        <small style="color:#000">Out of Office</small></h2>
+    </div>  
+	<!--end of header-->
+ 
+   <!--show loading message-->
+    <div cg-busy="{promise:myPromise,message:'Saving, please wait',backdrop:false,delay:300,minDuration:700}"></div>
+
+    <!--add section-->
+    <fieldset data-ng-init="hideAddSection=true">
+    <fieldset data-ng-init="addStatus='New'" > 
+    <fieldset data-ng-init="itemsPerPage=10" > 
+        
+        
+    <!--search section-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-10 col-md-11 " >
+                  <input type="text"  ng-model="query" class="form-control" style="height:27px"   
+                    placeholder="Search...">   
+                </div>
+                       
+                 <!-- Status Filter -->
+                <span class="dropdown" on-toggle="toggled(open)" >
+                    <a href class="glyphicon glyphicon-th dropdown-toggle"></a>
+                    <ul class="dropdown-menu  dropdown-menu-right">            
+                        <li><a ng-href="" style="cursor:pointer" ng-click="findByType(1)">&nbsp;Active songs</a></li>
+                        <li><a ng-href="" style="cursor:pointer" ng-click="findByType(2)">&nbsp;Unrated</a></li>
+                        <li><a ng-href="" style="cursor:pointer" ng-click="findByType(3)">&nbsp;Backlog</a></li>
+                    </ul>
+                </span>
+                <!-- Sort table -->
+                <span class="dropdown" on-toggle="toggled(open)" >
+                    <a href class="glyphicon glyphicon-sort dropdown-toggle"></a>
+                    <ul class="dropdown-menu  dropdown-menu-right">            
+                        <li><a ng-href="" style="cursor:pointer" ng-click="changeSorting('artist')"  >&nbsp;Artist</a></li>
+                        <li><a ng-href="" style="cursor:pointer" ng-click="changeSorting('name')"  >&nbsp;Name</a> </li>
+                        <li><a ng-href="" style="cursor:pointer" ng-click="changeSorting('status')"  >&nbsp;Status</a> </li>
+                        <li><a ng-href="" style="cursor:pointer" ng-click="changeSorting('created')"  >&nbsp;Creation</a>  </li>
+                    </ul>
+                </span>                      
+            </div><!--row-->
+        </div><!--panel-body-->
+    </div><!--panel-->
+    
+    <md-list-item ng-click="openDetail(song._id)" ng-repeat="song in songs.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter:query | filter:query:status | orderBy:sort.column:sort.descending" >
+        <md-checkbox class="md-secondary" ng-checked="exists(song._id, selected)" ng-click="toggle(song._id, selected)"></md-checkbox>
+            <img  ng-src="{{ song.song_image }}" class="md-avatar" />
+            <div class="md-list-item-text">
+                  <h4 style="line-height: 0.6;">{{song.name }} &nbsp;<span class="badge" ng-class="{'label-warning': {{song.external_rating}} <30, 'label-info': {{song.external_rating}}>=30 && {{song.external_rating}}<70, 'label-success': {{song.external_rating}}>=70}">{{song.external_rating}}</span></h4>
+                  <h5 style="line-height: 0.5;">{{song.artist }} </h5>
+                  <h5 style="line-height: 0.5;">{{song.song_status}}</h5>
+            </div>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+
+    <!--pagination code-->
+    <pagination total-items="songs.length" data-ng-hide="!songs.length || songs.length < itemsPerPage" ng-model="currentPage" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage"></pagination>  
+
+    <nav mfb-menu position="br" effect="zoomin" label="Options" active-icon="glyphicon glyphicon-remove-sign" resting-icon="glyphicon glyphicon-pencil" toggling-method="hover">
+      <button mfb-button data-ng-hide="!selected.length"  ng-click="showSetlistDialog($event, selected)" icon="glyphicon glyphicon-music" label="Add to setlist"  ng-controller="SetlistsController"></button>
+    </nav>  
+    <!--menu-->
+</section>

@@ -1,0 +1,21 @@
+<section class="container" data-ng-controller="SetlistsController" data-ng-init="find()">
+   <div class="jumbotron-m" > 
+        <h2>Setlists
+        <small style="color:#000">Out of Office</small></h2>
+    </div>  
+	<!--end of header-->
+
+    <md-list-item ng-click="openDetail(setlist._id)" ng-repeat="setlist in setlists" >
+            <div class="md-list-item-text">
+                  <h4 style="line-height: 0.6;">{{setlist.name }}</h4>
+                  <!--h5 style="line-height: 0.5;">{{song.artist }} </h5>
+                  <h5 style="line-height: 0.5;">{{song.song_status}}</h5-->
+            </div>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+    
+    <div class="alert alert-warning text-center" data-ng-hide="!setlists.$resolved || setlists.length">
+    	No Setlists yet, why don't you <a href="/#!/setlists/create">create one</a>?
+    </div>
+</section>

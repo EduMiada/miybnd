@@ -1,0 +1,39 @@
+<md-dialog aria-label="Add to Setlist"  flex="40" >
+  <form>
+  <md-toolbar>
+    <div class="md-toolbar-tools" >
+      <h2 style="color:#fff">Songs</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel('not applicable')">
+        <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+ 
+    <md-list-item class="md-3-line" ng-repeat="song in items" >
+      <md-checkbox class="md-primary" ng-checked="exists(song._id, selected)" ng-click="toggle(song._id, selected)"></md-checkbox>
+      <div class="md-list-item-text">
+        <h3>{{song.name }}</h3>
+        <h4>{{song.artist }}</h4>
+        <p>{{song.song_status}}</p>
+      </div>
+    </md-list-item> 
+    <md-divider></md-divider>
+   </md-list>
+ </md-dialog-content>
+  
+  
+  
+  <div class="md-actions" layout="row">
+    <md-button ng-click="cancel('useful')" class="md-primary">
+      Cancel
+    </md-button>
+     <md-button ng-click="modalAddToExistingSetlist(selected)" class="md-primary">
+      Add
+    </md-button>
+  </div>
+  </form>
+  
+</md-dialog>
+

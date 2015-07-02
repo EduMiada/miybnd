@@ -1,0 +1,125 @@
+<section data-ng-controller="SetlistsController" data-ng-init="findOne()" class="container" >
+<section ng-hide="viewModePlay">
+	
+	<div class="jumbotron-m" >
+    <table >
+          <tr>
+             <td>     
+             </td>
+             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+             <td>
+				<h3 style="margin-top:0px; margin-bottom:5px;">
+					<span data-ng-bind="setlist.name"></span>
+					<a href="https://play.spotify.com/track/{{song.spotify_id}}" target="_blank" ng-show="song.spotify_id != ''">
+						<img style="width:15px;height:15px" src="modules/core/img/spotify.jpg"/>
+					</a>
+				</h3>
+					<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
+            </td>
+       </tr>
+    </table> <!--row-->
+  </div>  
+
+<!--end of header-->
+ <div class="container">
+	<div id="tableContainer" class="table" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs" >
+		<div class="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item>
+			<div as-sortable-item-handle class="col-sm-1">
+              <i class="glyphicon glyphicon-menu-hamburger"></i>
+            </div>
+			<div class="col-md-4" >{{songs.song.name}}</div>
+			<div class="col-md-3">{{songs.song.artist}}</div>
+			<div class="col-md-1">{{songs.song.key}}</div>
+			<div class="col-md-1">{{songs.song.song_status}}</div>
+			<div class="col-md-1">{{songs.song.duration}}</div>
+			<div class="col-md-1">  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
+		</div>
+	</div>
+</div>
+
+
+<nav mfb-menu position="br" effect="zoomin" label="Options" active-icon="glyphicon glyphicon-remove-sign" resting-icon="glyphicon glyphicon-pencil" toggling-method="hover">
+	<button mfb-button ng-click="remove()" icon="glyphicon glyphicon-trash" label="remove"></button>
+  <button mfb-button  ng-click="showSongsDialog($event, selected)" icon="glyphicon glyphicon-plus" label="Add song" ></button>
+</nav>  
+	<!--table class="table" data-as-sortable="sortableOptions"  data-ng-model="setlist.songs" >
+		<tr data-ng-repeat="songs in setlist.songs"  data-as-sortable-item>
+			<td>{{$index}}</td>
+			<td>{{songs.order}}</td>
+			<td data-as-sortable-item-handle>{{songs.song.name}}</td>
+			<td>{{songs.song.artist}}</td>
+			<td>{{songs.song.key}}</td>
+			<td>{{songs.song.song_status}}</td>
+			<td>{{songs.song.duration}}</td>
+		
+		</tr>
+	</table-->
+	<!--iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3A12157462595%3Aplaylist%3A6V7QQDQaPWz8fkIMlNbuM3" width="300" height="380" frameborder="0" allowtransparency="true"></iframe-->
+
+</section>
+
+
+<section ng-hide="!viewModePlay"> 
+	
+<div class="jumbotron-m">
+    <table >
+          <tr>
+             <td>    
+             </td>
+             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+             <td>
+  					<h3 style="margin-top:0px; margin-bottom:5px;"><span data-ng-bind="setlist.name"></span> - 
+					
+					<span>{{setlist.songs[currentPage-1].song.name}}</span></h3>
+  					<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
+            </td>
+       </tr>
+	   <tr>
+		  
+    </table> <!--row-->
+	<!--list pager-->
+
+<pager total-items="setlist.songs.length" data-ng-hide="!setlist.songs.length" ng-model="currentPage" items-per-page="itemsPerPage"></pager>		
+
+
+  </div> 
+
+ 
+	<div class="row" data-ng-repeat="songs in setlist.songs.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | orderBy:'order'"  >
+		
+<!--end of header-->
+
+
+		<md-content >
+	    <md-tabs  md-dynamic-height md-border-bottom  >
+	    
+		
+		  <md-tab label="Lyrics">
+	        <md-content class="md-padding">
+				<div  ng-bind-html="songs.song.lyrics"></div>
+	        </md-content>
+	      </md-tab>
+	      <md-tab label="Tablature">
+  <md-input-container flex>
+              <label>Song Tablature</label>
+              <textarea ng-model="songs.song.tablature" columns="1" disabled></textarea>
+            </md-input-container>
+	      </md-tab>
+	      <md-tab label="Notes">
+	        <md-content class="md-padding">
+				This is just some content to illustrate fancy headings.
+	        </md-content>
+	      </md-tab>
+	    </md-tabs>
+	  </md-content>
+
+		
+	</div>
+
+
+	
+<!--list pager-->
+<pager total-items="setlist.songs.length" data-ng-hide="!setlist.songs.length" ng-model="currentPage" items-per-page="itemsPerPage"></pager>
+
+</section>
+</section>
