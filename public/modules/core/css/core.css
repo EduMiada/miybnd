@@ -222,8 +222,22 @@
     font-size: 24px;
     color:#fff;
   }
+   .jumbotron-m h4,
+  .jumbotron-m .h4 {
+    font-size: 24px;
+    color:#fff;
+  }
+   .jumbotron-m h5,
+  .jumbotron-m .h5 {
+    font-size: 24px;
+    color:#fff;
+  }
 }
-/*
+
+.Jumbotron-m-Header {
+      color:#fff;
+}
+
 .as-sortable-item, .as-sortable-placeholder {
    display: block;
-}*/
+}

@@ -50,7 +50,7 @@
         <md-checkbox class="md-secondary" ng-checked="exists(song._id, selected)" ng-click="toggle(song._id, selected)"></md-checkbox>
             <img  ng-src="{{ song.song_image }}" class="md-avatar" />
             <div class="md-list-item-text">
-                  <h4 style="line-height: 0.6;">{{song.name }} &nbsp;<span class="badge" ng-class="{'label-warning': {{song.external_rating}} <30, 'label-info': {{song.external_rating}}>=30 && {{song.external_rating}}<70, 'label-success': {{song.external_rating}}>=70}">{{song.external_rating}}</span></h4>
+                  <h4 style="line-height: 0.8;">{{song.name }} &nbsp;<span hide-sm class="badge" >{{song.external_rating}}</span></h4>
                   <h5 style="line-height: 0.5;">{{song.artist }} </h5>
                   <h5 style="line-height: 0.5;">{{song.song_status}}</h5>
             </div>

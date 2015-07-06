@@ -2,16 +2,16 @@
 <section ng-hide="viewModePlay">
 	
 	<div class="jumbotron-m" >
-    <table >
+    <table >		
           <tr>
              <td>     
              </td>
              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
              <td>
 				<h3 style="margin-top:0px; margin-bottom:5px;">
-					<span data-ng-bind="setlist.name"></span>
+					<span class="Jumbotron-m-Header" data-ng-bind="setlist.name"></span>
 					<a href="https://play.spotify.com/track/{{song.spotify_id}}" target="_blank" ng-show="song.spotify_id != ''">
-						<img style="width:15px;height:15px" src="modules/core/img/spotify.jpg"/>
+						<img style="width:15px;height:15px" src="modules/core/img/spotify.png"/>
 					</a>
 				</h3>
 					<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
@@ -20,41 +20,52 @@
     </table> <!--row-->
   </div>  
 
+  
 <!--end of header-->
- <div class="container">
-	<div id="tableContainer" class="table" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs" >
-		<div class="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item>
-			<div as-sortable-item-handle class="col-sm-1">
+<div class="container fluid">
+	<!--div id="tableContainer" class="table" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs" -->
+	<div id="tableContainer"  data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
+		<div layout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item class="as-sortable-item">
+			
+			<div as-sortable-item-handle flex="5" hide-sm>
               <i class="glyphicon glyphicon-menu-hamburger"></i>
             </div>
-			<div class="col-md-4" >{{songs.song.name}}</div>
-			<div class="col-md-3">{{songs.song.artist}}</div>
-			<div class="col-md-1">{{songs.song.key}}</div>
-			<div class="col-md-1">{{songs.song.song_status}}</div>
-			<div class="col-md-1">{{songs.song.duration}}</div>
+			<div flex ="33" flex-sm="80">{{songs.song.name}}</div>
+			<div flex  hide-sm>{{songs.song.artist}}</div>
+			<div flex>{{songs.song.key}}</div>
+			<div flex  hide-sm>{{songs.song.song_status}}</div>
+			<div flex  hide-sm>{{songs.song.duration}}</div>
+			<div flex>  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
+		</div>
+	</div>
+</div>
+
+
+<!--<div class="container fluid">
+	
+	<div id="tableContainer" classlayout="row" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
+		<div classlayout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item>
+			
+			<div as-sortable-item-handle class=" col-md-1 col-sm-1">
+              <i class="glyphicon glyphicon-menu-hamburger"></i>
+            </div>
+			<div class="col-sm-4 col-md-4" >{{songs.song.name}}</div>
+			<div class="col-md-3 hidden-sm">{{songs.song.artist}}</div>
+			<div class="col-md-1 hidden-xm-sm">{{songs.song.key}}</div>
+			<div class="col-md-1 hidden-xm-sm">{{songs.song.song_status}}</div>
+			<div class="col-md-1 hidden-xm-sm">{{songs.song.duration}}</div>
 			<div class="col-md-1">  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
 		</div>
 	</div>
 </div>
+-->
 
 
 <nav mfb-menu position="br" effect="zoomin" label="Options" active-icon="glyphicon glyphicon-remove-sign" resting-icon="glyphicon glyphicon-pencil" toggling-method="hover">
 	<button mfb-button ng-click="remove()" icon="glyphicon glyphicon-trash" label="remove"></button>
   <button mfb-button  ng-click="showSongsDialog($event, selected)" icon="glyphicon glyphicon-plus" label="Add song" ></button>
 </nav>  
-	<!--table class="table" data-as-sortable="sortableOptions"  data-ng-model="setlist.songs" >
-		<tr data-ng-repeat="songs in setlist.songs"  data-as-sortable-item>
-			<td>{{$index}}</td>
-			<td>{{songs.order}}</td>
-			<td data-as-sortable-item-handle>{{songs.song.name}}</td>
-			<td>{{songs.song.artist}}</td>
-			<td>{{songs.song.key}}</td>
-			<td>{{songs.song.song_status}}</td>
-			<td>{{songs.song.duration}}</td>
-		
-		</tr>
-	</table-->
-	<!--iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3A12157462595%3Aplaylist%3A6V7QQDQaPWz8fkIMlNbuM3" width="300" height="380" frameborder="0" allowtransparency="true"></iframe-->
+		<!--iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3A12157462595%3Aplaylist%3A6V7QQDQaPWz8fkIMlNbuM3" width="300" height="380" frameborder="0" allowtransparency="true"></iframe-->
 
 </section>
 
