@@ -219,7 +219,7 @@ exports.queryMusixMatch = function(req, res, next){
 
 
 exports.getMusixMatchFromID = function(req, res, next, id){
-console.log('get from id' + id);
+//console.log('get from id' + id);
  async.waterfall([
     function(callback) {
       request.get('http://api.musixmatch.com/ws/1.1/track.get?apikey=937dd267ce7fecd3922af964be92cc3c&track_id=' + id + '&format=json', function(error, response, body) {
@@ -227,7 +227,7 @@ console.log('get from id' + id);
         var jsonObject = JSON.parse(body);
 	    var track = jsonObject.message.body.track;
 		
-		console.log(track);
+//		console.log(track);
 
 		callback(error, track);
         });
@@ -245,15 +245,21 @@ console.log('get from id' + id);
     	var url= track.track_share_url; //'https://www.musixmatch.com/pt-br/letras/Pearl-Jam/Alive'
 		var track_lyrics = 'No lyrics';
 
+		//console.log('url-----------------------------');
+		//console.log(url);
+
   		request.get(url, function(error, response, body) {
         //if (error) return next
 
+
+		//console.log('body-----------------------------');
+		//console.log(body);
 
 		var htmlparser = require('htmlparser2');
 		var parser = new htmlparser.Parser({
 		    onopentag: function(name, attribs){
 		        if(name === 'script'){ //&& attribs.type === "text/javascript"){
-		           console.log('JS! Hooray!' + JSON.stringify(attribs));
+		  //         console.log('JS! Hooray!' + JSON.stringify(attribs));
 		        }
 		    },
 		    ontext: function(text){
