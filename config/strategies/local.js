@@ -14,9 +14,9 @@ module.exports = function() {
 			passwordField: 'password'
 		},
 		function(username, password, done) {
-			User.findOne({
-				username: username
-			}, function(err, user) {
+			//User.findOne({username: username}, function(err, user) {
+			User.findOne({username: username}).populate('selectedBand','name').exec(function(err, user) {
+
 				if (err) {
 					return done(err);
 				}

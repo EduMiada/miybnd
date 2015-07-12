@@ -14,7 +14,9 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var setlist = new Setlist(req.body);
 	setlist.user = req.user;
-console.log(setlist);
+	setlist.band = req.user.selectedBand;
+	
+	//console.log(setlist);
 	setlist.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -73,7 +75,7 @@ exports.delete = function(req, res) {
  * List of Setlists
  */
 exports.list = function(req, res) { 
-	Setlist.find().sort('-created').populate('user', 'displayName').exec(function(err, setlists) {
+	Setlist.find({band:req.user.selectedBand}).sort('-created').populate('user', 'displayName').exec(function(err, setlists) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

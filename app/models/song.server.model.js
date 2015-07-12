@@ -98,6 +98,10 @@ var SongSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
+	},
+	band: {
+		type: Schema.ObjectId,
+		ref: 'Band'
 	}
 });
 

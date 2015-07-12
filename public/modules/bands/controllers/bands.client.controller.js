@@ -1,10 +1,45 @@
 'use strict';
 
 // Bands controller
-angular.module('bands').controller('BandsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Bands',
-	function($scope, $stateParams, $location, Authentication, Bands) {
+angular.module('bands').controller('BandsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Bands','$http', 
+	function($scope, $stateParams, $location, Authentication, Bands, $http) {
 		$scope.authentication = Authentication;
+		
+		$scope.usersList = [];
+		
+		/*------------------------------
+		ADD Member TypeAhead
+		--------------------------------*/
+		//When selected user from list
+	 	$scope.onSelect = function ($item, $model, $label) {
+	    	$scope.selectedMemberID = $item; 
+		};
+		
+		//seach with typeahead musixmatch
+		$scope.searchUsers = function(val) {
+		    return $http.get('searchMembers', {params: { search: val, sensor: false}
+		    }).then(function(response){
+			      	return response.data.map(function(item){
+			        	return item;
+			     });
+		    });
+		};
+		
+		
 
+		//add  music  from musixmatch
+	 	$scope.addMember = function () {
+	   		var memberID =  $scope.selectedMemberID;
+			
+			//$scope.selectedMemberID = null;
+			$scope.error = null; 
+			$scope.asyncSelected = null;
+			
+			$scope.band.members.push({'admin':0, 'member':memberID} );
+			$scope.update();
+		};
+
+		
 		// Create new Band
 		$scope.create = function() {
 			// Create new Band object
@@ -61,6 +96,8 @@ angular.module('bands').controller('BandsController', ['$scope', '$stateParams',
 			$scope.band = Bands.get({ 
 				bandId: $stateParams.bandId
 			});
+			
+			console.log($scope.band);
 		};
 	}
 ]);

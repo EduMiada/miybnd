@@ -181,7 +181,7 @@ $scope.removeSong = function(index){
 			var msg = '';
 			
 			if (!response.setlist){
-				setlist = new Setlists ({name: response.name, songs:[]});		
+				setlist = new Setlists ({name: response.name,  songs:[]});		
 				
 				$scope.splitSongs (setlist, songs) ;
 			
@@ -210,18 +210,14 @@ $scope.removeSong = function(index){
 	    });
 	 };
 
-
-$scope.splitSongs = function(setlist, songs){
-	for (var i = 0; i < songs.length; i++) {
-		  var item = {
-		      '_id':songs[i], 
-		      'order':9999,
-		      'song': songs[i]
-		  };
-		   setlist.songs.push(item);
-		}
-	
-};
+		
+		$scope.splitSongs = function(setlist, songs){
+			for (var i = 0; i < songs.length; i++) {
+				  var item = {'order':9999, 'song': songs[i]};
+				   setlist.songs.push(item);
+				}
+			
+		};
 
 
 		// Create new Setlist

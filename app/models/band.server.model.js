@@ -20,6 +20,15 @@ var BandSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
+	members: [{
+		_id:{type: Schema.ObjectId, unique:true}, 
+		admin: Number,
+		member:{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}	
+	}],
+	
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'

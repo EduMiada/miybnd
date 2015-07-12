@@ -5,7 +5,9 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
-	crypto = require('crypto');
+	crypto = require('crypto'),
+	Band = mongoose.model('Band');
+	
 
 /**
  * A Validation function for local strategy properties
@@ -66,6 +68,12 @@ var UserSchema = new Schema({
 		type: String,
 		required: 'Provider is required'
 	},
+	
+	selectedBand: {
+		type: Schema.ObjectId,
+		ref: 'Band'
+	},
+	
 	providerData: {},
 	additionalProvidersData: {},
 	roles: {
@@ -88,7 +96,13 @@ var UserSchema = new Schema({
 	},
 	resetPasswordExpires: {
 		type: Date
-	}
+	},
+	
+	bands:[{
+		_id:{type: Schema.ObjectId},
+		selected:{type: Boolean},
+		name:{type:String}
+	}]
 });
 
 /**
@@ -112,6 +126,35 @@ UserSchema.methods.hashPassword = function(password) {
 	} else {
 		return password;
 	}
+};
+
+UserSchema.methods.loadBands = function() {
+//populate users band 			
+			Band.find().exec(function(err, bands) {
+				if (err) {
+					//return res.status(400).send({
+				//		message: errorHandler.getErrorMessage(err)
+						console.log(err);
+				//	});
+				} else {
+					
+					
+				   for (var i = 0; i < bands.length; i++) {
+				          var item = {
+				              '_id':bands[i]._id, 
+				              'selected':true,
+				              'name': bands[i].name
+				          };
+						  
+						 console.log(item);
+				         this.bands.push(item);
+				      }
+					  
+				}
+			});
+			
+			//console.log(user);
+
 };
 
 /**

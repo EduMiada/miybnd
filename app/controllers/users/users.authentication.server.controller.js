@@ -7,7 +7,9 @@ var _ = require('lodash'),
 	errorHandler = require('../errors.server.controller'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+	User = mongoose.model('User'),
+	//Band = mongoose.model('Band	'),
+	async = require('async');
 
 /**
  * Signup
@@ -34,7 +36,8 @@ exports.signup = function(req, res) {
 			// Remove sensitive data before login
 			user.password = undefined;
 			user.salt = undefined;
-
+			
+			
 			req.login(user, function(err) {
 				if (err) {
 					res.status(400).send(err);
@@ -57,17 +60,68 @@ exports.signin = function(req, res, next) {
 			// Remove sensitive data before login
 			user.password = undefined;
 			user.salt = undefined;
-
+			//user.bands.push({'_id': 123123, 'selected':true, name:'no practice'});
 			req.login(user, function(err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
+					
+//inicio
+//					 async.waterfall([
+//					    function(callback) {
+							//user.loadBands();			
+							//user.password = 'xpto';
+							
+//								Band.find().exec(function(err, bands) {
+//									if (err) {
+										//return res.status(400).send({
+									//		message: errorHandler.getErrorMessage(err)
+//											console.log(err);
+									//	});
+//									} else {
+										
+										
+//									   for (var i = 0; i < bands.length; i++) {
+//									          var item = {
+//									              '_id':bands[i]._id, 
+//									              'selected':true,
+//									              'name': bands[i].name
+//									          };
+//											  
+//											 console.log(item);
+//									         user.bands.push(item);
+//									      }
+//										  
+//									}
+//								});
+							
+							
+							
+							
+							
+//							callback(err, user);
+//					    }			    
+//					   ], 
+//					   function(err, user) {
+//							console.log(user);							
+//							res.json(user);	
+					   		//next();
+					      //res.send(200);
+//					    });
+					//};
+				
+//fim 
+					
+			//		console.log(user);
+					
 					res.json(user);
 				}
 			});
 		}
-	})(req, res, next);
+	})
+	(req, res, next);
 };
+
 
 /**
  * Signout

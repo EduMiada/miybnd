@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Band = mongoose.model('Band'),
+	User = mongoose.model('User'),
 	_ = require('lodash');
 
 /**
@@ -14,6 +15,7 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var band = new Band(req.body);
 	band.user = req.user;
+	band.members.push({'admin': 1, member: band.user });
 
 	band.save(function(err) {
 		if (err) {
@@ -73,6 +75,7 @@ exports.delete = function(req, res) {
  * List of Bands
  */
 exports.list = function(req, res) { 
+	
 	Band.find().sort('-created').populate('user', 'displayName').exec(function(err, bands) {
 		if (err) {
 			return res.status(400).send({
@@ -84,16 +87,53 @@ exports.list = function(req, res) {
 	});
 };
 
+exports.queryMusixMatch = function(req, res, next){
+	var searchParam = new RegExp(req.params.search, 'i');
+//app.User.find()exec(function(err, users) {
+//    res.json(JSON.stringify(users));
+//});
+	User.find().or([{ 'displayName': { $regex: searchParam }}, 
+					{ 'username': { $regex: searchParam }}]).sort('displayName').exec(function(err, users){
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.send(users);
+		}
+	});
+
+};
+
+
 /**
  * Band middleware
  */
 exports.bandByID = function(req, res, next, id) { 
-	Band.findById(id).populate('user', 'displayName').exec(function(err, band) {
+
+	Band.findById(id, function (err, band) {
+	 var opts = [
+	      	 { path: 'user', select: 'displayName' },
+	    	 { path: 'members.member',  model: 'User'} ];
+	
+	Band.populate(band, opts, function (err, band) {
 		if (err) return next(err);
 		if (! band) return next(new Error('Failed to load Band ' + id));
+		console.log(band);
+		
 		req.band = band ;
 		next();
+    
+	  });
 	});
+
+  	
+	//Band.findById(id).populate('user', 'displayName').exec(function(err, band) {
+//		if (err) return next(err);/
+		//if (! band) return next(new Error('Failed to load Band ' + id));
+		//req.band = band ;
+	//	next();
+	//});
 };
 
 /**
