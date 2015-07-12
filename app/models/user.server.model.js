@@ -98,6 +98,10 @@ var UserSchema = new Schema({
 		type: Date
 	},
 	
+	showHelp: {
+		type: Boolean
+	},
+	
 	bands:[{
 		_id:{type: Schema.ObjectId},
 		selected:{type: Boolean},

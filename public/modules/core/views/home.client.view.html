@@ -1,4 +1,7 @@
-<section data-ng-controller="HomeController">
+<section data-ng-show="authentication.user"  data-ng-controller="HomeController">
+
+<section  data-ng-init="showHelp($event)" data-ng-controller="SettingsController"></section>
+
 
 		<!-- ==== HEADERWRAP ==== -->
 		<div id="headerwrap" id="home" name="home" data-ng-controller="SongsController">			
@@ -65,10 +68,14 @@
 			</div><!-- greywrap -->
 		</section>
 		
-
 	<div id="footerwrap">
 		<div class="container">
 			<h4>MIYBND Repertoire and Setlist manager</h4>
 		</div>
 	</div>
+	
+	
+	
+		
+
 </section>

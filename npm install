@@ -1,0 +1,1 @@
+express express-session body-parser cookie-parser compression method-override morgan connect-mongo connect-flash helmet consolidate swig mongoose passport passport-local passport-facebook passport-twitter passport-linkedin passport-google-oauth passport-github lodash forever bower grunt-cli glob async nodemailer chalk request htmlparser2

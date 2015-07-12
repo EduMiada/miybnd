@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $http, $location, Users, Authentication) {
+angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication', '$mdDialog',
+	function($scope, $http, $location, Users, Authentication, $mdDialog) {
 		$scope.user = Authentication.user;
 
 		// If user is not signed in then redirect back home
@@ -67,5 +67,50 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 				$scope.error = response.message;
 			});
 		};
+		
+		
+		
+		/*---------------------------------------------
+		DIALOG LIST SONG
+		----------------------------------------------*/
+		$scope.showHelp = function (ev) {
+			
+			if (!$scope.user.showHelp){
+				
+				$mdDialog.show({
+				  controller: UserDialogController,
+				  templateUrl: 'modalHelp.tmpl.html',
+				  parent: angular.element(document.body), 
+				  targetEvent: ev,
+				})
+				.then(function(response) {
+				   
+					if (response){
+						$scope.user.showHelp = true;	
+						$scope.updateUserProfile(true);
+					}
+				
+				}, function() {
+				  $scope.alert = 'You cancelled the dialog.';
+				});
+			}
+		};
+		
+		
 	}
 ]);
+
+function UserDialogController($scope, $mdDialog) {
+  
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  
+  $scope.modalShow = function(value){
+	 $mdDialog.hide(true);
+  };
+  		
+}
