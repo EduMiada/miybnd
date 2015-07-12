@@ -22,11 +22,11 @@ var SetlistSchema = new Schema({
 	},
 	
 	songs: [{
-		_id:{type: Schema.ObjectId, unique:true}, 
 		order: Number,
 		song:{
 			type: Schema.ObjectId,
-			ref: 'Song'
+			ref: 'Song',
+			unique:true
 		}
 	}],
 	

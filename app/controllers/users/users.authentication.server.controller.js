@@ -65,56 +65,8 @@ exports.signin = function(req, res, next) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
-					
-//inicio
-//					 async.waterfall([
-//					    function(callback) {
-							//user.loadBands();			
-							//user.password = 'xpto';
-							
-//								Band.find().exec(function(err, bands) {
-//									if (err) {
-										//return res.status(400).send({
-									//		message: errorHandler.getErrorMessage(err)
-//											console.log(err);
-									//	});
-//									} else {
-										
-										
-//									   for (var i = 0; i < bands.length; i++) {
-//									          var item = {
-//									              '_id':bands[i]._id, 
-//									              'selected':true,
-//									              'name': bands[i].name
-//									          };
-//											  
-//											 console.log(item);
-//									         user.bands.push(item);
-//									      }
-//										  
-//									}
-//								});
-							
-							
-							
-							
-							
-//							callback(err, user);
-//					    }			    
-//					   ], 
-//					   function(err, user) {
-//							console.log(user);							
-//							res.json(user);	
-					   		//next();
-					      //res.send(200);
-//					    });
-					//};
-				
-//fim 
-					
-			//		console.log(user);
-					
 					res.json(user);
+					//console.log(user);
 				}
 			});
 		}
