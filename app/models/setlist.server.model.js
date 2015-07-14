@@ -25,8 +25,7 @@ var SetlistSchema = new Schema({
 		order: Number,
 		song:{
 			type: Schema.ObjectId,
-			ref: 'Song',
-			unique:true
+			ref: 'Song'
 		}
 	}],
 	

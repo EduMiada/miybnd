@@ -1,8 +1,11 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication', '$mdDialog',
+angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication', '$mdDialog', 
 	function($scope, $http, $location, Users, Authentication, $mdDialog) {
 		$scope.user = Authentication.user;
+
+		//slides help
+		var slides = $scope.slides = ["01.png"];
 
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');
@@ -69,15 +72,16 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		};
 		
 		
-		
 		/*---------------------------------------------
 		DIALOG LIST SONG
 		----------------------------------------------*/
 		$scope.showHelp = function (ev) {
 			
-			if (!$scope.user.showHelp){
+			if (!$scope.user.showHelp && $scope.user){
 				
 				$mdDialog.show({
+				  clickOutsideToClose: true,
+				  escapeToClose: true,
 				  controller: UserDialogController,
 				  templateUrl: 'modalHelp.tmpl.html',
 				  parent: angular.element(document.body), 

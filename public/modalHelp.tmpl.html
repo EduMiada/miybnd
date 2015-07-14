@@ -1,79 +1,77 @@
 <md-dialog aria-label="How It works"  flex="90" >
-  <form>
+
   <md-toolbar>
     <div class="md-toolbar-tools" >
       <h2 style="color:#fff">Check it Out How It works</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cancel('not applicable')">
-        <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        <md-icon  aria-label="Close dialog"></md-icon>
       </md-button>
     </div>
   </md-toolbar>
   <md-dialog-content>
  
-   <carousel interval="5000">
-      <slide  active="true">
+   <carousel id="myCarousel" disable-animation="true" interval="5000">
+      <slide >
         <img ng-src="/modules/core/img/help/1.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Add new song sugestions and after the rate process they will be added to the band´s songs</h4>
+          <h4 style="color:#fff">Add song sugestions to your band´s evaluation, <br>after the rating process the song will be added to the Repertoire</br></h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/2.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Type the song and artist name to search Musixmatch catalog</h4>
+          <h4 style="color:#fff">Type the song and artist name to search Musixmatch catalog</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/3.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Songs will be "Unrate" until all the band rate it, if you don´t want to play that song it will be saved as backlog</h4>
+          <h4 style="color:#fff">Songs will be Unrate until all the band rate it, if you don´t want to play that song it will be saved as backlog</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/4.png" style="margin:auto;width:70%;height:50%">
         <div class="carousel-caption">
-          <h4>The songs list can be filtered and organized</h4>
+          <h4 style="color:#fff">The songs list can be filtered and organized</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/5.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Selecting a song all you can see the auto populated field and lyrics and edit</h4>
+          <h4 style="color:#fff">Selecting a song all you can see the auto populated field and lyrics and edit</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/6.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Lyrics are automatic loaded </h4>
+          <h4 style="color:#fff">Lyrics are automatic loaded </h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/7.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Organize songs in Setlists</h4>
+          <h4 style="color:#fff">Organize songs in Setlists</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/8.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>You can have as many as needed </h4>
+          <h4 style="color:#fff">You can have as many as needed </h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/9.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>The songs can be organized in any order by dragg and drop</h4>
+          <h4 style="color:#fff">The songs can be organized in any order by dragg and drop</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/10.png" style="margin:auto;width:70%;height:70%">
         <div class="carousel-caption">
-          <h4>Play mode will show the songs in the setlist order</h4>
+          <h4 style="color:#fff">Play mode will show the songs in the setlist order</h4>
         </div>
       </slide>
-	  
-	  
 	 </carousel>
 
    
@@ -89,7 +87,6 @@
         Don´t show again
     </md-button>
   </div>
-  </form>
   
 </md-dialog>
 

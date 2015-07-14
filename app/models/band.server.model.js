@@ -21,7 +21,6 @@ var BandSchema = new Schema({
 		default: Date.now
 	},
 	members: [{
-		_id:{type: Schema.ObjectId, unique:true}, 
 		admin: Number,
 		member:{
 			type: Schema.ObjectId,
