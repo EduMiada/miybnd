@@ -1,4 +1,4 @@
-<section class="row" data-ng-controller="AuthenticationController">
+<section class="row" data-ng-controller="AuthenticationController" style="background:#428bca; height:100%">
 	<!--h3 class="col-md-12 text-center">Sign in using your social accounts</h3>
 	<div class="col-md-12 text-center">
 		<a href="/auth/facebook" class="undecorated-link">
@@ -17,8 +17,7 @@
 			<img src="/modules/users/img/buttons/github.png">
 		</a>
 	</div-->
-	<h3 class="col-md-12 text-center">Or with your account</h3>
-	<div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
+	<!--div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
 		<form data-ng-submit="signin()" class="signin form-horizontal" autocomplete="off">
 			<fieldset>
 				<div class="form-group">
@@ -41,5 +40,44 @@
 				</div>
 			</fieldset>
 		</form>
-	</div>
+	</div-->
+	<p/>
+	<p/>
+	<p/>
+	
+	<div  class="container" >
+		<div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4">
+		<form data-ng-submit="signin()"  autocomplete="off">
+			
+	        <h2 class="text-center" style="color:#fff">Sign In</h2>
+			<p/>
+			  
+			<div class="form-group">
+				<input type="text" id="username" name="username" class="form-control input-lg" data-ng-model="credentials.username" placeholder="Username" required autofocus>
+			</div>
+			<div class="form-group">
+				<input type="password" id="password" name="password" class="form-control input-lg" data-ng-model="credentials.password" placeholder="Password" required>
+			</div>
+			
+			<button type="submit" ng-disabled="loginForm.$invalid"
+			      class="btn btn-lg btn-block btn-success">Sign In
+			</button>
+
+
+			<div class="forgot-password text-center">
+				<a style="color:#fff" href="/#!/password/forgot">Forgot your password?</a>
+			</div>
+
+			<div data-ng-show="error" class="text-center text-danger">
+				<strong data-ng-bind="error"></strong>
+			</div>
+						
+        </form>
+		</div>
+     </div>
+
+
+
 </section>
+
+   	

@@ -26,16 +26,15 @@
 	<!--div id="tableContainer" class="table" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs" -->
 	<div id="tableContainer"  data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
 		<div layout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item class="as-sortable-item">
-			
-			<div as-sortable-item-handle flex="5" hide-sm>
+			<div as-sortable-item-handle flex="5">
               <i class="glyphicon glyphicon-menu-hamburger"></i>
             </div>
-			<div flex ="33" flex-sm="80">{{songs.song.name}}</div>
-			<div flex  hide-sm>{{songs.song.artist}}</div>
-			<div flex>{{songs.song.key}}</div>
-			<div flex  hide-sm>{{songs.song.song_status}}</div>
-			<div flex  hide-sm>{{songs.song.duration}}</div>
-			<div flex>  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
+			<div flex ="40" flex-sm="85">{{songs.song.name}}</div>
+			<div flex ="20"  hide-sm>{{songs.song.artist}}</div>
+			<div flex ="10" >{{songs.song.key}}</div>
+			<div flex ="15" hide-sm>{{songs.song.song_status}}</div>
+			<div flex ="5" hide-sm>{{songs.song.duration}}</div>
+			<div flex ="5">  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
 		</div>
 	</div>
 </div>

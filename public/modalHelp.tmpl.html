@@ -1,10 +1,10 @@
-<md-dialog aria-label="How It works"  flex="90" >
+<md-dialog aria-label="How It works"  flex="50" >
 
   <md-toolbar>
     <div class="md-toolbar-tools" >
       <h2 style="color:#fff">Check it Out How It works</h2>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="cancel('not applicable')">
+      <md-button class="md-icon-button" ng-click="cancel('not applicable')">x
         <md-icon  aria-label="Close dialog"></md-icon>
       </md-button>
     </div>
@@ -15,31 +15,31 @@
       <slide >
         <img ng-src="modules/core/img/help/1.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">Add song sugestions to your band´s evaluation, <br>after the rating process the song will be added to the Repertoire</br></h4>
+          <h4 style="color:#fff">Add song sugestions to your band´s evaluation <br>after the rating process the songs will be added to the Repertoire</br></h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/2.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">Type the song and artist name to search Musixmatch catalog</h4>
+          <h4 style="color:#fff">Type the song and artist name to search Musixmatch catalog (be patience its running on a Machine w/ 512MB RAM)</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/3.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">Songs will be Unrate until all the band rate it, if you don´t want to play that song it will be saved as backlog</h4>
+          <h4 style="color:#fff">The song have Unrated status until all band rate it, or if someone say Don´t Wanna Play it will automatically to Backlog</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/4.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">The songs list can be filtered and organized</h4>
+          <h4 style="color:#fff">The song list can be filtered and organized</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/5.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">Selecting a song all you can see the auto populated field and lyrics and edit</h4>
+          <h4 style="color:#fff">Selecting a song you can view and edit the auto populated fields</h4>
         </div>
       </slide>
 	  <slide>
@@ -63,13 +63,13 @@
 	  <slide>
         <img ng-src="/modules/core/img/help/9.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">The songs can be organized in any order by dragg and drop</h4>
+          <h4 style="color:#fff">The songs can be organized in any order with Drag and Drop</h4>
         </div>
       </slide>
 	  <slide>
         <img ng-src="/modules/core/img/help/10.PNG" style="margin:auto;">
         <div class="carousel-caption">
-          <h4 style="color:#fff">Play mode will show the songs in the setlist order</h4>
+          <h4 style="color:#fff">Play mode will show the songs in order</h4>
         </div>
       </slide>
 	 </carousel>
@@ -80,11 +80,12 @@
   
   
   <div class="md-actions" layout="row">
-    <md-button ng-click="cancel('useful')" class="md-primary">
-      Close
-    </md-button>
+   
      <md-button ng-click="modalShow(false)" class="md-primary">
         Don´t show again
+    </md-button>
+    <md-button ng-click="cancel('useful')" class="md-primary">
+      Close
     </md-button>
   </div>
   
