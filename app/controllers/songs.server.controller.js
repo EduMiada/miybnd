@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Song = mongoose.model('Song'),
+	Band = mongoose.model('Band'),
 	_ = require('lodash'),
 	async = require('async'),
 	request = require('request'),
@@ -368,29 +369,35 @@ var mongoose = require('mongoose'),
 		var song = req.song ;
 		var rate =  Number(req.query.rateNumber);
 		
-		
-		//console.log(song);
-		
 		//if rate == 1 hell no change status to backlog
-		if(rate === -1){
-			song.song_status = 'Backlog';
-		}
+		//if(rate === -1){
+		//	song.song_status = 'Backlog';
+		//}
 	
-		song.user_rate.push({_id:req.user._id ,user:req.user._id, rate:rate}) ;
+		//add the user rate to the song
+		//song.user_rate.push({_id:req.user._id ,user:req.user._id, rate:rate}) ;
 			
-		//get the number of rates if equals the band number of members change the status if not rate zero backlog
-		if (song.user_rate.length ===  4){
-			if (rate > 0){
-				song.song_status = 'New';
-			}
-		}
-	
-		song.save(function(err) {
+		//get the number of band members
+		//Band.getMembers(req.user.selectedBand._id, function (err, members){
+		//	var numMembers = members.length;
+			
+			//get the number of rates if equals the band number of members change the status if not rate zero (backlog)
+		//	if (song.user_rate.length ===  numMembers){
+		//		if (rate > 0){
+		//			song.song_status = 'New';
+		//			console.log('status new')
+		//		}
+		//	}
+		//Band.getMembers(req.user.selectedBand._id, function (err, members){
+		Song.addUserRate(song._id, req.user._id, rate, function( err, song) {	
+		//	song.save(function(err) {
 			if (err) {
 				return res.status(400).send({message: errorHandler.getErrorMessage(err)});
 			} 
 			else {
-				Song.find({ song_status : 'Unrated', 'user_rate._id' : { $ne: req.user._id}  } ).sort('-created').populate('user', 'displayName').exec(function(err, song) {
+				Song.find({ song_status : 'Unrated', 'user_rate._id' : { $ne: req.user._id}, 'band':req.user.selectedBand  } ).sort('-created').populate('user', 'displayName').exec(function(err, song) {
+
+				//Song.find({ song_status : 'Unrated', 'user_rate._id' : { $ne: req.user._id}  } ).sort('-created').populate('user', 'displayName').exec(function(err, song) {
 				//Music.find({ status : 'Unrated' } ).sort('-created').populate('user', 'displayName').exec(function(err, music) {
 					if (err) {
 						return res.status(400).send({
@@ -401,5 +408,6 @@ var mongoose = require('mongoose'),
 					}
 				});
 			}
-		});
-	};
+		}); //song.addUserRate callback
+		
+	};//end function

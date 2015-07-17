@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+	Band = mongoose.model('Band'),
 	Schema = mongoose.Schema;
 
 /**
@@ -104,6 +105,105 @@ var SongSchema = new Schema({
 		ref: 'Band'
 	}
 });
+
+
+
+SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
+	var _this = this;
+	var status = '';
+	var rateChanged = false;
+
+	//if rate == 1 hell no change status to backlog
+	if(songRate === -1){
+		status = 'Backlog';
+	}
+	
+	
+	//console.log('songs status: ' + status + ' songID:' + songID + ' userID: ' + userID + ' songRate: ' + songRate);
+	
+	//get the song check if the user already have created, if so update or create a new
+	_this.findById(songID).exec(function(err, song) {     //populate('user', 'displayName').exec(function(err, song) {
+		if (song) {
+			
+			console.log('find Ok')
+			
+			//user already rated so update and keep the status
+			for (var i = 0; i < song.user_rate.length; i++) {
+				if (song.user_rate[i].user === userID){
+					song.user_rate[i].rate = songRate;
+					rateChanged = true;
+				}	
+			} //loop
+
+
+			//console.log('rateChanged :' + rateChanged);
+
+			//add the user rate to the song and update status if needed			
+			if (!rateChanged){
+				song.user_rate.push({_id: userID, user:userID, rate: songRate}) ;
+				
+				
+				console.log('push ok ' );
+				//console.log(song);
+		
+				//get the number of band members
+				Band.getMembers(song.band, function (err, members){
+					var numMembers = members.length;
+					
+					console.log('members:' + numMembers);
+					
+					//get the number of rates if equals the band number of members change the status if not rate zero (backlog)
+					if (song.user_rate.length ===  numMembers){
+						if (songRate > 0){
+							status  = 'New';
+						}
+					}
+					
+					song.song_status = status;
+	
+					song.save(function(err) {
+						if (err) {
+							callback(err, null);
+							console.log('save err ' + err);
+						} 
+						else {
+							console.log('save ok');
+							callback(null, song);
+						}
+					}); //song.save callback
+				}); //band get member callback
+			} //rate changed if
+		}else{
+			callback (err,null);
+			console.log('erro find')
+			
+		}
+	}); //findbyId callback
+}; //end function
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Get list of valid status

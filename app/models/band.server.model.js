@@ -34,4 +34,20 @@ var BandSchema = new Schema({
 	}
 });
 
+
+BandSchema.statics.getMembers = function(bandID, callback) {
+	var _this = this;
+	
+	_this.findOne({_id: bandID}, function(err, band) {		
+		if (band) {
+			console.log(band.members.length)
+			callback (err, band.members);
+		}else {
+			return null;
+		}
+	});
+};
+
+
+
 mongoose.model('Band', BandSchema);

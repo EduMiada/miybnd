@@ -25,7 +25,7 @@
 <div class="container fluid">
 	<!--div id="tableContainer" class="table" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs" -->
 	<div id="tableContainer"  data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
-		<div layout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item class="as-sortable-item">
+		<div layout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item class="as-sortable-item" style="padding-top: 5px; padding-bottom: 5px;">
 			<div as-sortable-item-handle flex="5">
               <i class="glyphicon glyphicon-menu-hamburger"></i>
             </div>
