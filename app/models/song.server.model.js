@@ -91,6 +91,8 @@ var SongSchema = new Schema({
 		}, 
 		rate: Number
 	}],
+	
+	song_rate: {type:Number, default: 0},
 
 	created: {
 		type: Date,
@@ -112,6 +114,7 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 	var _this = this;
 	var status = '';
 	var rateChanged = false;
+	var calculatedRate = 0;
 
 	//if rate == 1 hell no change status to backlog
 	if(songRate === -1){
@@ -133,18 +136,23 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 					song.user_rate[i].rate = songRate;
 					rateChanged = true;
 				}	
+				
+				calculatedRate += song.user_rate[i].rate;
 			} //loop
 
-
-			//console.log('rateChanged :' + rateChanged);
+			
 
 			//add the user rate to the song and update status if needed			
 			if (!rateChanged){
 				song.user_rate.push({_id: userID, user:userID, rate: songRate}) ;
 				
-				
+				calculatedRate += songRate; 
+
+				console.log('calculated rate:' + calculatedRate);
 				console.log('push ok ' );
 				//console.log(song);
+		
+				song.song_rate = (calculatedRate / song.user_rate.length);
 		
 				//get the number of band members
 				Band.getMembers(song.band, function (err, members){
@@ -159,7 +167,9 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 						}
 					}
 					
-					song.song_status = status;
+					if (status !==  ''){
+						song.song_status = status;
+					}				
 	
 					song.save(function(err) {
 						if (err) {
