@@ -148,8 +148,8 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 				
 				calculatedRate += songRate; 
 
-				console.log('calculated rate:' + calculatedRate);
-				console.log('push ok ' );
+				//console.log('calculated rate:' + calculatedRate);
+				//console.log('push ok ' );
 				//console.log(song);
 		
 				song.song_rate = (calculatedRate / song.user_rate.length);
@@ -158,7 +158,7 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 				Band.getMembers(song.band, function (err, members){
 					var numMembers = members.length;
 					
-					console.log('members:' + numMembers);
+					//console.log('members:' + numMembers);
 					
 					//get the number of rates if equals the band number of members change the status if not rate zero (backlog)
 					if (song.user_rate.length ===  numMembers){
