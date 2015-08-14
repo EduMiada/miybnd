@@ -7,8 +7,10 @@ module.exports = {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.min.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
-				//'public/lib/bootstrap/dist/css/bootstrap.css',
-				//'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+				'public/lib/mdi/css/materialdesignicons.min.css',
+				'public/lib/ng-sortable/dist/dist/ng-sortable.min.css',
+				'public/lib/ng-sortable/dist/dist/ng-sortable.style.min.css'
+	
 			],
 			js: [
 				'public/lib/jquery/dist/jquery.min.js', 
@@ -33,6 +35,11 @@ module.exports = {
 		js: 'public/dist/application.min.js'
 
 	},
+	spotify: {
+        clientID: '5063d7fc578d4b928e96e050790860c9' || 'APP_ID',
+        clientSecret: 'f6f4758ea04942668385ab0d4953e014' || 'APP_SECRET',
+        callbackURL: "/auth/spotify/callback"
+    },
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
 		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',

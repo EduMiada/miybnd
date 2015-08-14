@@ -8,6 +8,18 @@ module.exports = function(app) {
 	app.route('/setlists')
 		.get(setlists.list)
 		.post(users.requiresLogin, setlists.create);
+		
+	app.route('/setlists/spotify/create/:setlistId')
+		//.get(setlists.list)
+		.post(users.requiresLogin, setlists.createSpotifyPlaylist);
+
+	app.route('/setlists/spotify/update/:setlistId')
+		//.get(setlists.list)
+		.post(users.requiresLogin, setlists.updateSpotifyPlaylist);
+		
+	app.route('/setlists/spotify/follow/:setlistId')
+		//.get(setlists.list)
+		.post(users.requiresLogin, setlists.followSpotifyPlaylist);
 
 	app.route('/setlists/:setlistId')
 		.get(setlists.read)

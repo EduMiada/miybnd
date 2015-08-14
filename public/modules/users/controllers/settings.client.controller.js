@@ -1,14 +1,28 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication', '$mdDialog', 
-	function($scope, $http, $location, Users, Authentication, $mdDialog) {
+angular.module('users').controller('SettingsController', ['$scope', '$rootScope', '$http', '$location', 'Users', 'Authentication', '$mdDialog', 
+	function($scope,$rootScope, $http, $location, Users, Authentication, $mdDialog) {
 		$scope.user = Authentication.user;
-
+		$scope.bands = [];
+	
+		
 		//slides help
 		var slides = $scope.slides = ["01.png"];
 
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');
+
+		//$scope.loadBands();
+		//LOAD USER´s BANDS
+		// Change user password
+		$scope.loadBands = function() {
+			$http.get('/users/' + $scope.user._id + '/bands').success(function(response) {
+				$scope.bands = response;
+			}).error(function(response) {
+				$scope.error = response.message;
+			});
+		};
+
 
 		// Check if there are additional accounts 
 		$scope.hasConnectedAdditionalSocialAccounts = function(provider) {
@@ -36,6 +50,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 				// If successful show success message and clear form
 				$scope.success = true;
 				$scope.user = Authentication.user = response;
+				$rootScope.$broadcast('changeUserSelectedBand', Authentication);		
 			}).error(function(response) {
 				$scope.error = response.message;
 			});
@@ -46,10 +61,11 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 			if (isValid) {
 				$scope.success = $scope.error = null;
 				var user = new Users($scope.user);
-
+				//user.selectedBand = $scope.selectedBand._id;
 				user.$update(function(response) {
 					$scope.success = true;
-					Authentication.user = response;
+					$scope.user = Authentication.user = response;
+					 $rootScope.$broadcast('changeUserSelectedBand', Authentication);					
 				}, function(response) {
 					$scope.error = response.data.message;
 				});
@@ -64,7 +80,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 
 			$http.post('/users/password', $scope.passwordDetails).success(function(response) {
 				// If successful show success message and clear form
-				$scope.success = true;
+//				$scope.success = true;
 				$scope.passwordDetails = null;
 			}).error(function(response) {
 				$scope.error = response.message;

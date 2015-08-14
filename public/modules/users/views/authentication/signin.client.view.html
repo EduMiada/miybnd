@@ -1,7 +1,7 @@
 <section class="row" data-ng-controller="AuthenticationController" style="background:#428bca; height:100%">
 	<!--h3 class="col-md-12 text-center">Sign in using your social accounts</h3>
 	<div class="col-md-12 text-center">
-		<a href="/auth/facebook" class="undecorated-link">
+		<a href="/auth/spotify" class="undecorated-link">
 			<img src="/modules/users/img/buttons/facebook.png">
 		</a>
 		<a href="/auth/twitter" class="undecorated-link">
@@ -47,35 +47,65 @@
 	
 	<div  class="container" >
 		<div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4">
-		<form data-ng-submit="signin()"  autocomplete="off">
-			
-	        <h2 class="text-center" style="color:#fff">Sign In</h2>
-			<p/>
-			  
-			<div class="form-group">
-				<input type="text" id="username" name="username" class="form-control input-lg" data-ng-model="credentials.username" placeholder="Username" required autofocus>
-			</div>
-			<div class="form-group">
-				<input type="password" id="password" name="password" class="form-control input-lg" data-ng-model="credentials.password" placeholder="Password" required>
-			</div>
-			
-			<button type="submit" ng-disabled="loginForm.$invalid"
-			      class="btn btn-lg btn-block btn-success">Sign In
-			</button>
+			<form data-ng-submit="signin()"  autocomplete="off">
 
-
-			<div class="forgot-password text-center">
-				<a style="color:#fff" href="/#!/password/forgot">Forgot your password?</a>
-			</div>
-
-			<div data-ng-show="error" class="text-center text-danger">
-				<strong data-ng-bind="error"></strong>
-			</div>
-						
-        </form>
+		        <h2 class="text-center" style="color:#fff">Sign In <i class="mdi  mdi-account-key"></i></h2>
+				<p/>
+				  
+				<div class="form-group">
+					<input type="text" id="username" name="username" class="form-control input-lg" data-ng-model="credentials.username" placeholder="Username" required autofocus>
+				</div>
+				<div class="form-group">
+					<input type="password" id="password" name="password" class="form-control input-lg" data-ng-model="credentials.password" placeholder="Password" required>
+				</div>
+				
+				<button type="submit" ng-disabled="loginForm.$invalid"
+				      class="btn btn-lg btn-block btn-success">Sign In
+				</button>
+	
+	
+				<div class="forgot-password text-center">
+					<a style="color:#fff" href="/#!/password/forgot">Forgot your password?</a>
+				</div>
+	
+				<div data-ng-show="error" class="text-center text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+							
+	        </form>
+		<p/>
+		<p/>
+		<p/>
+		<p/>
+		
 		</div>
+		
      </div>
 
+		<!-- ==== GREYWRAP ==== -->
+		<div id="greywrap">
+			<p/>
+			<div class="row">
+				<div class="col-lg-4 callout">
+					<span class="mdi mdi-music-circle" style="color:#ccc"></span>
+					<h2>Share Repertoire Ideas</h2>
+					<p>Import songs from MusixMatch Catalog and let the band rank the songs they want to play.</p>
+				</div><!-- col-lg-4 -->
+					
+				<div class="col-lg-4 callout">
+					<span class="mdi mdi-library-music" style="color:#ccc"></span>
+					<h2>Manage Setlists</h2>
+					<p>Organize songs in setlist for Gigs and Rehearsals.</p>
+				</div><!-- col-lg-4 -->	
+				
+				<div class="col-lg-4 callout">
+					<span class="mdi mdi-spotify" style="color:#ccc"></span>
+					<h2>Sincronize with Spotify</h2>
+					<p>Sync and follow your band´s setlists with Spotify playlists. </p>
+				</div><!-- col-lg-4 -->	
+			</div><!-- row -->
+		</div><!-- greywrap -->
+	</div>
 
 
 </section>

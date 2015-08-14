@@ -57,6 +57,8 @@ var mongoose = require('mongoose'),
 	
 		song = _.extend(song , req.body);
 	
+		//console.log(song);
+	
 		song.save(function(err) {
 			if (err) {
 				return res.status(400).send({
@@ -89,6 +91,7 @@ var mongoose = require('mongoose'),
 	 * List of Songs
 	 */
 	exports.list = function(req, res) { 
+		//console.log(req.user);
 		var filterType =  Number(req.query.filterType);
 		var filter =['New','Work in Process', 'Ready to Rock!'];
 	
@@ -133,9 +136,10 @@ var mongoose = require('mongoose'),
 	 * Song authorization middleware
 	 */
 	exports.hasAuthorization = function(req, res, next) {
-		if (req.song.user.id !== req.user.id) {
-			return res.status(403).send('User is not authorized');
-		}
+	//	if (req.song.user.id !== req.user.id) {
+	//		return res.status(403).send('User is not authorized');
+	//	}
+	
 		next();
 	};
 

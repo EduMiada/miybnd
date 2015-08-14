@@ -13,6 +13,9 @@ var passport = require('passport'),
  */
 module.exports = function() {
 	// Serialize sessions
+	
+					
+	
 	passport.serializeUser(function(user, done) {
 		done(null, user.id);
 	});
@@ -21,14 +24,15 @@ module.exports = function() {
 	passport.deserializeUser(function(id, done) {
 		
 		User.findOne({_id: id}, '-salt -password').populate('selectedBand','name').exec(function(err, user) {
-			done(err, user);
+			//console.log('aqui',err);
+			done(err, user);		
 		});
 		
-		//User.findOne({
-		//	_id: id
-		//}, '-salt -password', function(err, user) {
-		//	done(err, user);
-		//});
+	//	User.findOne({
+	//		_id: id//
+//		}, '-salt -password', function(err, user) {
+//			done(err, user);
+//		});
 	});
 
 	// Initialize strategies

@@ -49,5 +49,47 @@ BandSchema.statics.getMembers = function(bandID, callback) {
 };
 
 
+/*
+LOAD THE USERS BANDS
+*/
+BandSchema.statics.userBands = function(userID, selectedBandID, callback) {
+
+
+	var _this = this
+	var userObjectID = mongoose.Types.ObjectId(userID);
+	var arrBands= [];
+		
+	//console.log(userID);
+	
+	_this.find({'members.member': userObjectID}).select('_id, name').exec(function(err, bands) {
+		
+		if (err) {
+				console.log(err);
+		} else {
+		   for (var i = 0; i < bands.length; i++) {
+				var selected = false;
+				if (bands[i]._id === selectedBandID){
+					selected = true;
+				}
+				
+				var item = {
+				  '_id':bands[i]._id, 
+				  'selected':selected,
+				  'name': bands[i].name
+				};
+  
+		          arrBands.push(item);
+		      }
+			
+			
+			callback(arrBands);
+			
+		}
+				
+	});
+};
+
+
+
 
 mongoose.model('Band', BandSchema);

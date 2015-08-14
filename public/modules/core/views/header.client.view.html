@@ -35,6 +35,7 @@
 		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="mdi mdi-account"></i>
 					<span data-ng-bind="authentication.user.firstName"></span>, {{authentication.user.selectedBand.name}}<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">
@@ -48,17 +49,20 @@
 						<a href="/#!/settings/password">Change Password</a>
 					</li>
 					
-					<!--band list-->
+					<li class="divider"></li>
+					<!--spotify-->
 					
-				
-					<!--li>
-						<a href="/#!/settings/profile">Band A</a>
+					 
+					<li data-ng-show="!isConnectedSocialAccount('spotify')" data-ng-controller="SettingsController">
+						<a  href="/auth/spotify">Connect with Spotify</a>
 					</li>
-					<li>
-						<a href="/#!/settings/profile">Band B</a>
-					</li-->
-		
-					<!--band list-->
+					
+					<li data-ng-show="isConnectedSocialAccount('spotify')"  data-ng-controller="SettingsController">
+						<a  data-ng-click="removeUserSocialAccount('spotify')">Disconect Spotify</a>
+					</li>	
+
+					
+					<!--spotify-->
 					<li class="divider"></li>
 					<li>
 						<a href="/auth/signout">Signout</a>

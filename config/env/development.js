@@ -5,6 +5,11 @@ module.exports = {
 	app: {
 		title: 'MIYBND - Development Environment'
 	},
+	spotify: {
+        clientID: '5063d7fc578d4b928e96e050790860c9' || 'APP_ID',
+        clientSecret: 'f6f4758ea04942668385ab0d4953e014' || 'APP_SECRET',
+        callbackURL: "/auth/spotify/callback"
+    },
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
 		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
@@ -16,8 +21,8 @@ module.exports = {
 		callbackURL: '/auth/twitter/callback'
 	},
 	google: {
-		clientID: process.env.GOOGLE_ID || 'APP_ID',
-		clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
+		clientID:'543966572181-ap52ouh5ku4ngurn0l3ovdob7k82dq1s.apps.googleusercontent.com' || 'APP_ID',
+		clientSecret:'5sELnUtODi1z4UDTYrIkAUbR' || 'APP_SECRET',
 		callbackURL: '/auth/google/callback'
 	},
 	linkedin: {

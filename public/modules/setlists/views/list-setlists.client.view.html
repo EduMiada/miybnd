@@ -1,6 +1,6 @@
 <section class="container" data-ng-controller="SetlistsController" data-ng-init="find()">
    <div class="jumbotron-m" > 
-        <h2>Setlists
+        <h2  style="color:#fff">Setlists
         <small style="color:#000">{{authentication.user.selectedBand.name}}</small></h2>
     </div>  
 	<!--end of header-->
@@ -18,4 +18,9 @@
     <div class="alert alert-warning text-center" data-ng-hide="!setlists.$resolved || setlists.length">
     	No Setlists yet, why don't you <a href="/#!/setlists/create">create one</a>?
     </div>
+    
+    <nav mfb-menu position="br" effect="zoomin" label="Options" active-icon="glyphicon glyphicon-remove-sign" resting-icon="glyphicon glyphicon-pencil" toggling-method="hover">
+      <button mfb-button ng-click="showNewSetlistDialog()" icon="glyphicon glyphicon-plus" label="New setlist" ></button>
+    </nav>  
+    
 </section>

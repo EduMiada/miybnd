@@ -14,18 +14,27 @@ module.exports = function() {
 			passwordField: 'password'
 		},
 		function(username, password, done) {
+			//console.log(username);
+			
 			//User.findOne({username: username}, function(err, user) {
-			User.findOne({username: username}).populate('selectedBand','name').exec(function(err, user) {
+			User.findOne({username: username})
+				.populate('selectedBand','name')
+				.exec(function(err, user) {
+
+				//console.log(user);
+
 
 				if (err) {
 					return done(err);
 				}
 				if (!user) {
+					console.log('Unknown user or invalid password 1');
 					return done(null, false, {
 						message: 'Unknown user or invalid password'
 					});
 				}
 				if (!user.authenticate(password)) {
+					console.log('Unknown user or invalid password 2');
 					return done(null, false, {
 						message: 'Unknown user or invalid password'
 					});

@@ -10,10 +10,13 @@ module.exports = function(app) {
 	var users = require('../../app/controllers/users.server.controller');
 
 
+
 	// Setting up the users profile api
 	app.route('/users/me').get(users.me);
 	app.route('/users').put(users.update);
 	app.route('/users/accounts').delete(users.removeOAuthProvider);
+	app.route('/users/:userId/bands').get(users.userBands);
+
 
 	// Setting up the users password api
 	app.route('/users/password').post(users.changePassword);
@@ -31,6 +34,21 @@ module.exports = function(app) {
 		scope: ['email']
 	}));
 	app.route('/auth/facebook/callback').get(users.oauthCallback('facebook'));
+	
+	// Setting the SPOTIFY oauth routes
+	app.route('/auth/spotify').get(passport.authenticate('spotify', {
+		scope: ['user-read-email', 'user-read-private', 'playlist-read-collaborative', 'playlist-modify-public', 'playlist-modify-private'] ,  showDialog: true
+	}));
+	app.route('/auth/spotify/callback').get(users.oauthCallback('spotify'));
+	
+	
+	//app.route('/connect/spotify').get(passport.authenticate('spotify', {
+	//	scope: ['user-read-email', 'user-read-private', 'playlist-read-collaborative', 'playlist-modify-public', 'playlist-modify-private'] 
+	//}));
+	//app.route('/connect/spotify/callback').get(users.oauthCallback('spotify'));
+	
+
+
 
 	// Setting the twitter oauth routes
 	app.route('/auth/twitter').get(passport.authenticate('twitter'));

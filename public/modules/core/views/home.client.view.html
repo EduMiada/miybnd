@@ -1,4 +1,4 @@
-<section data-ng-show="authentication.user"  data-ng-controller="HomeController">
+<section data-ng-show="authentication.user"  data-ng-controller="HomeController" style="background:#428bca; height:100%">
 
 	<section  data-ng-init="showHelp($event)" data-ng-controller="SettingsController"></section>
 
@@ -10,7 +10,7 @@
 
 			<fieldset data-ng-init="addStatus='Unrated'" >
 
-			<header class="clearfix">
+			<header>
 	  		 		<p>Start by adding some songs for <span style="color:#000"> {{authentication.user.selectedBand.name}}</span></p>
 	  		 		<p>and rate the suggestions.</p>
 	  		</header>	    
@@ -48,7 +48,7 @@
 				<div class="row">
 					<div class="col-md-4 callout" ng-repeat="song in unratedSongs.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | orderBy:-created  ">
 						<img class="img img-circle" ng-src="{{song.song_image}}"> 
-						<h4><b>{{song.name}}</b></h4>
+						<h4><b ng-click="showSongDialog(song._id)" >{{song.name}}</b></h4>
 						{{song.artist}}<br/>
 						<rating ng-model="rate"  id="{{song._id}}"  max="max" readonly="false" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating>
 						<br/>
@@ -68,14 +68,11 @@
 			</div><!-- greywrap -->
 		</section>
 		
-	<div id="footerwrap">
+	<!--div id="footerwrap">
 		<div class="container">
 			<h4>MIYBND Repertoire and Setlist manager</h4>
 		</div>
-	</div>
+	</div-->
 	
-	
-	
-		
 
 </section>

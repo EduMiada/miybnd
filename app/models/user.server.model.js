@@ -106,7 +106,9 @@ var UserSchema = new Schema({
 		_id:{type: Schema.ObjectId},
 		selected:{type: Boolean},
 		name:{type:String}
-	}]
+	}],
+	
+	spotifyAuthCode: String
 });
 
 /**
@@ -132,39 +134,13 @@ UserSchema.methods.hashPassword = function(password) {
 	}
 };
 
-UserSchema.methods.loadBands = function() {
-//populate users band 			
-			Band.find().exec(function(err, bands) {
-				if (err) {
-					//return res.status(400).send({
-				//		message: errorHandler.getErrorMessage(err)
-						console.log(err);
-				//	});
-				} else {
-					
-					
-				   for (var i = 0; i < bands.length; i++) {
-				          var item = {
-				              '_id':bands[i]._id, 
-				              'selected':true,
-				              'name': bands[i].name
-				          };
-						  
-						 console.log(item);
-				         this.bands.push(item);
-				      }
-					  
-				}
-			});
-			
-			//console.log(user);
-
-};
-
 /**
  * Create instance method for authenticating user
  */
 UserSchema.methods.authenticate = function(password) {
+	console.log('password1',this.password );
+	console.log('password2',this.hashPassword(password));
+	
 	return this.password === this.hashPassword(password);
 };
 

@@ -1,32 +1,28 @@
-<section class="row" data-ng-controller="SettingsController">
+<section class="row" data-ng-controller="SettingsController" data-ng-init="loadBands()">
 	<h3 class="col-md-12 text-center">Edit your profile</h3>
+	
 	<div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
 		<form name="userForm" data-ng-submit="updateUserProfile(userForm.$valid)" class="signin form-horizontal" autocomplete="off">
-			<fieldset>
-				<div class="form-group">
-					<label for="firstName">First Name</label>
-					<input type="text" id="firstName" name="firstName" class="form-control" data-ng-model="user.firstName" placeholder="First Name">
-				</div>
-				<div class="form-group">
-					<label for="lastName">Last Name</label>
-					<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="user.lastName" placeholder="Last Name">
-				</div>
-				<div class="form-group">
-					<label for="email">Email</label>
-					<input type="email" id="email" name="email" class="form-control" data-ng-model="user.email" placeholder="Email">
-				</div>
-				<div class="form-group">
-					<label for="username">Username</label>
-					<input type="text" id="username" name="username" class="form-control" data-ng-model="user.username" placeholder="Username">
-				</div>
-				<div class="form-group">
-					<label for="selectedBand">Band</label>
-					<input type="text" id="selectedBand" name="selectedBand" class="form-control" data-ng-model="user.selectedBand" placeholder="selectedBand">
-				</div>
-				<div class="form-group">
-					<label for="showHelp">Hide Instructions</label>
-					<input type="text" id="showHelp" name="showHelp" class="form-control" data-ng-model="user.showHelp" >
-				</div>
+				<md-select placeholder="Band" ng-model="user.selectedBand._id" name="selectedBand">
+					<md-option ng-repeat="band in bands" value="{{band._id}}" >{{band.name}}</md-option>
+				</md-select>
+				<md-input-container>
+					<label>First Name</label>
+					<input type="text" id="firstName" name="firstName"  data-ng-model="user.firstName" placeholder="First Name">
+				</md-input-container>
+				<md-input-container>
+					<label>Last Name</label>
+					<input type="text" id="lastName" data-ng-model="user.lastName" placeholder="Last Name">
+				</md-input-container>
+				<md-input-container>
+					<label>email</label>
+					<input type="email" id="email" name="email" data-ng-model="user.email" placeholder="Email">
+				</md-input-container>
+				<md-input-container>
+					<label>Show Help</label>
+					<input type="text" id="showHelp" name="showHelp"  data-ng-model="user.showHelp" >
+				</md-input-container>																								
+
 				<div class="text-center form-group">
 					<button type="submit" class="btn btn-large btn-primary">Save Profile</button>
 				</div>
@@ -36,7 +32,7 @@
 				<div data-ng-show="error" class="text-center text-danger">
 					<strong data-ng-bind="error"></strong>
 				</div>
-			</fieldset>
 		</form>
 	</div>
+	
 </section>

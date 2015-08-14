@@ -258,6 +258,20 @@
       color:#fff;
 }
 
-.as-sortable-item, .as-sortable-placeholder {
-   display: block;
+.as-sortable-item,
+.as-sortable-placeholder {
+    list-style: none;
+}
+
+.as-sortable-placeholder {
+    border: 1px dotted #ccc !important;
+}
+
+#sortable-container {
+    display: inline-block;
+}
+
+.column {
+    border: 1px solid #000000;
+    border-radius: 5px;
 }

@@ -15,6 +15,10 @@ module.exports = {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+				'public/lib/mdi/css/materialdesignicons.min.css',
+				'public/lib/ng-sortable/dist/dist/ng-sortable.min.css',
+				'public/lib/ng-sortable/dist/dist/ng-sortable.style.min.css'
+	
 			],
 			js: [
 				'public/lib/jquery/dist/jquery.min.js', 

@@ -8,7 +8,7 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	User = mongoose.model('User'),
-	//Band = mongoose.model('Band	'),
+	request = require('Request'),
 	async = require('async');
 
 /**
@@ -55,20 +55,28 @@ exports.signup = function(req, res) {
 exports.signin = function(req, res, next) {
 	passport.authenticate('local', function(err, user, info) {
 		if (err || !user) {
+			console.log('erro',  err);
+			console.log(user);
 			res.status(400).send(info);
 		} else {
+			
 			// Remove sensitive data before login
 			user.password = undefined;
 			user.salt = undefined;
-			//user.bands.push({'_id': 123123, 'selected':true, name:'no practice'});
+			
+
 			req.login(user, function(err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
+
 					res.json(user);
-					//console.log(user);
+	
 				}
+		
 			});
+			
+	
 		}
 	})
 	(req, res, next);
@@ -88,7 +96,9 @@ exports.signout = function(req, res) {
  */
 exports.oauthCallback = function(strategy) {
 	return function(req, res, next) {
+			
 		passport.authenticate(strategy, function(err, user, redirectURL) {
+			
 			if (err || !user) {
 				return res.redirect('/#!/signin');
 			}
@@ -103,10 +113,33 @@ exports.oauthCallback = function(strategy) {
 	};
 };
 
+
+
 /**
  * Helper function to save or update a OAuth user profile
  */
 exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
+
+
+/*
+
+var authOptions = {
+      url: 'https://api.spotify.com/v1/users/edumiyada/playlists',
+      headers: {
+        'Authorization': 'Bearer ' + providerData.accessToken
+      },
+	  data:  "{\"name\":\"NewPlaylist\",\"public\":false}",
+      json: true
+    };
+
+	 request.post(authOptions, function(error, response, body) {
+    	console.log(error);
+		  //console.log(response);
+		  console.log(body);
+	 });
+*/
+
+	
 	if (!req.user) {
 		// Define a search query fields
 		var searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;
@@ -157,6 +190,8 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 	} else {
 		// User is already logged in, join the provider data to the existing user
 		var user = req.user;
+		
+		console.log('user logged-oauth');
 
 		// Check if user exists, is not signed in using this provider, and doesn't have that provider data already configured
 		if (user.provider !== providerUserProfile.provider && (!user.additionalProvidersData || !user.additionalProvidersData[providerUserProfile.provider])) {

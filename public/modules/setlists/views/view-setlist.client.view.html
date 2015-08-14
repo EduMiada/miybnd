@@ -10,7 +10,7 @@
              <td>
 				<h3 style="margin-top:0px; margin-bottom:5px;">
 					<span class="Jumbotron-m-Header" data-ng-bind="setlist.name"></span>
-					<a href="https://play.spotify.com/track/{{song.spotify_id}}" target="_blank" ng-show="song.spotify_id != ''">
+					<a href="https://play.spotify.com/playlist/{{setlist.spotifyPlaylistId}}" target="_blank" ng-show="setlist.spotifyPlaylistId != undefined">
 						<img style="width:15px;height:15px" src="modules/core/img/spotify.png"/>
 					</a>
 				</h3>
@@ -19,51 +19,28 @@
        </tr>
     </table> <!--row-->
   </div>  
-
   
 <!--end of header-->
-<div class="container fluid">
-	<!--div id="tableContainer" class="table" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs" -->
-	<div id="tableContainer"  data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
-		<div layout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item class="as-sortable-item" style="padding-top: 5px; padding-bottom: 5px;">
-			<div as-sortable-item-handle flex="5">
+<div   class="container fluid"  id="sortable-container">
+	<div  class="sortable-row" as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
+	<div layout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'" as-sortable-item class="as-sortable-item"  style="padding-top: 5px; padding-bottom: 5px;">
+		
+			<div   as-sortable-item-handle class="as-sortable-item-handle"  flex="5">
               <i class="glyphicon glyphicon-menu-hamburger"></i>
             </div>
-			<div flex ="40" flex-sm="85">{{songs.song.name}}</div>
+			<div flex ="40" flex-sm="85" ng-click="showSongDialog(songs.song._id)" data-ng-controller="SongsController">{{songs.song.name}}</div>
 			<div flex ="20"  hide-sm>{{songs.song.artist}}</div>
 			<div flex ="10" >{{songs.song.key}}</div>
 			<div flex ="15" hide-sm>{{songs.song.song_status}}</div>
 			<div flex ="5" hide-sm>{{songs.song.duration}}</div>
-			<div flex ="5">  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
+			<div flex ="5">  <i ng-click="removeSong($index)"  class="mdi mdi-delete"></i></div>
 		</div>
 	</div>
 </div>
-
-
-<!--<div class="container fluid">
 	
-	<div id="tableContainer" classlayout="row" data-as-sortable="dragControlListeners"  data-ng-model="setlist.songs">
-		<div classlayout="row" data-ng-repeat="songs in setlist.songs | orderBy:'order'"  data-as-sortable-item>
-			
-			<div as-sortable-item-handle class=" col-md-1 col-sm-1">
-              <i class="glyphicon glyphicon-menu-hamburger"></i>
-            </div>
-			<div class="col-sm-4 col-md-4" >{{songs.song.name}}</div>
-			<div class="col-md-3 hidden-sm">{{songs.song.artist}}</div>
-			<div class="col-md-1 hidden-xm-sm">{{songs.song.key}}</div>
-			<div class="col-md-1 hidden-xm-sm">{{songs.song.song_status}}</div>
-			<div class="col-md-1 hidden-xm-sm">{{songs.song.duration}}</div>
-			<div class="col-md-1">  <i ng-click="removeSong($index)"  class="glyphicon glyphicon-remove-circle"></i></div>
-		</div>
-	</div>
-</div>
--->
-
-
-<nav mfb-menu position="br" effect="zoomin" label="Options" active-icon="glyphicon glyphicon-remove-sign" resting-icon="glyphicon glyphicon-pencil" toggling-method="hover">
-	<button mfb-button ng-click="remove()" icon="glyphicon glyphicon-trash" label="remove"></button>
-  <button mfb-button  ng-click="showSongsDialog($event, selected)" icon="glyphicon glyphicon-plus" label="Add song" ></button>
-</nav>  
+	<nav mfb-menu position="br" effect="zoomin" label="Options" active-icon="glyphicon glyphicon-remove-sign" resting-icon="glyphicon glyphicon-pencil" toggling-method="hover">
+		<button mfb-button data-ng-repeat="button in buttons" ng-click="$parent.$eval(button.event)" icon="{{button.icon}}" label="{{button.label}}"></button>
+	</nav>  
 		<!--iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3A12157462595%3Aplaylist%3A6V7QQDQaPWz8fkIMlNbuM3" width="300" height="380" frameborder="0" allowtransparency="true"></iframe-->
 
 </section>

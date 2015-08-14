@@ -1,8 +1,8 @@
 'use strict';
 
 // Setlists controller
-angular.module('setlists').controller('SetlistsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Setlists', '$mdDialog','$mdToast','Songs',
-	function($scope, $stateParams, $location, Authentication, Setlists, $mdDialog, $mdToast, Songs) {
+angular.module('setlists').controller('SetlistsController', ['$scope',  '$stateParams', '$location', 'Authentication', 'Setlists', '$mdDialog','$mdToast','Songs', '$http',
+	function($scope, $stateParams, $location, Authentication, Setlists, $mdDialog, $mdToast, Songs, $http) {
 		$scope.authentication = Authentication;
 
 
@@ -22,6 +22,45 @@ angular.module('setlists').controller('SetlistsController', ['$scope', '$statePa
 	    	);
 		};
 		
+		$scope.loadButtonsMenu = function(){
+			$scope.buttons = [{
+			  label: 'Delete setlist',
+			  icon: 'glyphicon glyphicon-trash',
+			  event: 'remove()'
+			},{
+			  label: 'Add song',
+			  icon: 'glyphicon glyphicon-plus',
+			  event: 'showSongsDialog($event, selected)'
+			}];
+			
+			if (($scope.isConnectedSocialAccount('spotify') && $scope.isSpotifyPlaylistOwner()) || $scope.setlist.spotifyPlaylistId === undefined ){
+				if($scope.setlist.spotifyPlaylistId==undefined){
+					$scope.buttons.push({
+						  label: 'Create Spotify Playlist',
+						  icon: 'glyphicon glyphicon-music',
+						  event: 'createSpotifyPlaylist()'
+						});
+				}else{
+					$scope.buttons.push({
+						  label: 'Update Spotify Playlist',
+						  icon: 'glyphicon glyphicon-music',
+						  event: 'updateSpotifyPlaylist()'
+					});
+				}
+			} //connected to spotify and playlist owner
+			
+			//connected to spotify but not owner
+			if ($scope.isConnectedSocialAccount('spotify') && !$scope.isSpotifyPlaylistOwner() && $scope.setlist.spotifyPlaylistId !==undefined){
+					$scope.buttons.push({
+						  label: 'Follow Spotify Playlist',
+						  icon: 'glyphicon glyphicon-music',
+						  event: 'followSpotifyPlaylist()'
+					});
+			}
+			
+		};
+		
+
 		
 		/*------------------------------------------
 		PAGE CONTROLER
@@ -34,6 +73,58 @@ angular.module('setlists').controller('SetlistsController', ['$scope', '$statePa
 			$scope.currentPage = pageNo;
 		};
 		
+		
+		$scope.createSpotifyPlaylist = function(){
+			$scope.success = $scope.error = null;
+			$http.post('/setlists/spotify/create/' + $scope.setlist._id, { setlistId:  $scope.setlist._id }).success(function(response) {
+				// If successful show success message and clear form
+				$scope.success = true;
+				$scope.showMessage('Spotify Playlist created | ' + $scope.setlist.name);
+				//$scope.user = Authentication.user = response;
+				//$rootScope.$broadcast('changeUserSelectedBand', Authentication);		
+			}).error(function(response) {
+				$scope.error = response.message;
+			});
+	
+		};
+		
+		// Check if provider is already in use with current user
+		$scope.isConnectedSocialAccount = function(provider) {
+			return $scope.authentication.user.provider === provider || ($scope.authentication.user.additionalProvidersData && $scope.authentication.user.additionalProvidersData[provider]);
+		};
+				
+		$scope.isSpotifyPlaylistOwner = function(){
+			//alert($scope.authentication.user.additionalProvidersData.spotify.id);
+			//alert($scope.setlist.spotifyOwnerId);
+			
+			return $scope.authentication.user.additionalProvidersData.spotify.id === $scope.setlist.spotifyOwnerId;
+		};
+		 
+		$scope.updateSpotifyPlaylist = function(){
+			$scope.success = $scope.error = null;
+			$http.post('/setlists/spotify/update/' + $scope.setlist._id, { setlistId:  $scope.setlist._id }).success(function(response) {
+				// If successful show success message and clear form
+				$scope.success = true;
+				$scope.showMessage('Spotify Playlist updated.');
+				//$scope.user = Authentication.user = response;
+				//$rootScope.$broadcast('changeUserSelectedBand', Authentication);		
+			}).error(function(response) {
+				$scope.error = response.message;
+			});
+	
+		};
+		
+		
+		$scope.followSpotifyPlaylist = function(){
+			$scope.success = $scope.error = null;
+			$http.post('/setlists/spotify/follow/' + $scope.setlist._id, { setlistId:  $scope.setlist._id }).success(function(response) {
+				$scope.success = true;
+				$scope.showMessage('You are now following the Spotify Playlist');
+			}).error(function(response) {
+				$scope.error = response.message;
+			});
+	
+		};
     
     /*---------------------------------------------
 		DIALOG LIST SONG
@@ -82,6 +173,37 @@ angular.module('setlists').controller('SetlistsController', ['$scope', '$statePa
 
 
 
+  		/*---------------------------------------------
+		DIALOG NEW SETLIST
+		----------------------------------------------*/
+	
+		$scope.showNewSetlistDialog = function(ev, songs) {
+		  
+		  $mdDialog.show({
+	      controller: DialogController,
+	      templateUrl: 'modalNewSetlist.tmpl.html',
+	      parent: angular.element(document.body),
+	      targetEvent: ev,
+	      locals: {
+	           items: null
+	         },
+	    })
+	    .then(function(response) {
+			var setlist = new Setlists ({name: response});		
+				
+			setlist.$save(function() {
+				$scope.find();
+				$scope.showMessage('Setlist created sucessfully | ' + setlist.name);
+			}, function(errorResponse) {
+				$scope.showMessage(errorResponse.data.message);				
+			});		      	
+		}, function() {
+	      $scope.alert = 'You cancelled the dialog.';
+	    });
+	 };
+
+
+
 
 $scope.dragControlListeners = {
 //    accept: function (sourceItemHandleScope, destSortableScope) {return boolean}, //override to determine drag is allowed or not. default is true.
@@ -105,8 +227,10 @@ $scope.dragControlListeners = {
     
     
    },
-    containment: '#tableContainer'//optional param.
+    containment: '#sortable-container' //, //optional param.
+	//containerPositioning: 'relative'
 };
+
 
 $scope.removeSong = function(index){
     $scope.setlist.songs.splice(index,1);
@@ -268,14 +392,21 @@ $scope.removeSong = function(index){
 
 		// Find a list of Setlists
 		$scope.find = function() {
+			//$scope.loadButtonsMenu();
 			$scope.setlists = Setlists.query();
+		
 		};
 
 		// Find existing Setlist
 		$scope.findOne = function() {
-			$scope.setlist = Setlists.get({ 
-				setlistId: $stateParams.setlistId
+		
+			$scope.setlist = Setlists.get({setlistId: $stateParams.setlistId}, function(){
+				
+				$scope.loadButtonsMenu();
+				
 			});
+			
+			
 		};
 	}
 ]);
@@ -295,6 +426,11 @@ function DialogController($scope, $mdDialog, items) {
   $scope.add = function(answer) {
     $mdDialog.hide(answer, null);
   };
+ 
+  $scope.save = function() {
+    $mdDialog.hide($scope.setlistName);
+  };
+ 
   
   $scope.modalAddToExistingSetlist = function(item) {
   	var response = {setlist:item, name:null} ;
@@ -320,38 +456,3 @@ function DialogController($scope, $mdDialog, items) {
 		};	
 		
 }
-
-
-/*
- $scope.showAlert = function(ev) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    // Modal dialogs should fully cover application
-    // to prevent interaction outside of dialog
-    $mdDialog.show(
-      $mdDialog.alert()
-        .parent(angular.element(document.body))
-        .title('This is an alert title')
-        .content('You can specify some description text in here.')
-        .ariaLabel('Alert Dialog Demo')
-        .ok('Got it!')
-        .targetEvent(ev)
-    );
-  };
-  $scope.showConfirm = function(ev) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-      .parent(angular.element(document.body))
-      .title('Would you like to delete your debt?')
-      .content('All of the banks have agreed to forgive you your debts.')
-      .ariaLabel('Lucky day')
-      .ok('Please do it!')
-      .cancel('Sounds like a scam')
-      .targetEvent(ev);
-    $mdDialog.show(confirm).then(function() {
-      $scope.alert = 'You decided to get rid of your debt.';
-    }, function() {
-      $scope.alert = 'You decided to keep your debt.';
-    });
-  };
-  
-  */

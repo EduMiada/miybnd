@@ -7,22 +7,36 @@
              </td>
              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
              <td>
-  					   <h3 style="margin-top:0px; margin-bottom:5px;"><span data-ng-bind="song.name"></span>
+  					   <h3 style="margin-top:0px; margin-bottom:5px;color:#fff"><span data-ng-bind="song.name"></span>
+      					<a href="https://www.youtube.com/embed/{{song.youtube_id}}?html5=1" style="text-decoration: none; color: #ccc;" target="_blank" ng-show="song.youtube_id != '' ">
+      					   <i class="mdi mdi-youtube-play"></i>
+      					</a>		
+      					<a href="https://play.spotify.com/track/{{song.spotify_id}}" target="_blank" style="text-decoration: none; color: #ccc;" ng-show="song.spotify_id != ''">
+      						<i class="mdi mdi-spotify"></i>
+      					</a>
+
+
   						  <!--span class="label" style="font-size:10px; vertical-align:middle" ng-class="{'label-warning': {{song.external_rating}} <30, 'label-info': {{song.external_rating}}>=30 && {{song.external_rating}}<70, 'label-success': {{song.external_rating}}>=70}">{{song.external_rating}}</span-->
   					   </h3>
   					   <span data-ng-bind="song.artist"></span><br/>
       					<small><span data-ng-bind="song.song_status"></span></small><br/>					
-      					<a href="https://www.youtube.com/embed/{{song.youtube_id}}?html5=1" target="_blank" ng-show="song.youtube_id != '' ">
-      						<img style="width:15px;height:15px" src="modules/core/img/youtube.jpg"/>
-      					</a>		
-      					<a href="https://play.spotify.com/track/{{song.spotify_id}}" target="_blank" ng-show="song.spotify_id != ''">
-      						<img style="width:15px;height:15px" src="modules/core/img/spotify.png"/>
-      					</a>
             </td>
+            <td>
+          
+             </td>
        </tr>
     </table> <!--row-->
+
+
+        <!--div style = "position: fixed; top: 40px; right:0">
+              <iframe src="https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+              </div-->
+
   </div>  
 	<!--end of header-->
+
+
+
 
 <!--iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%3A1UqhkbzB1kuFwt2iy4h29Q" width="300" height="380" frameborder="0" allowtransparency="true"></iframe-->
 	

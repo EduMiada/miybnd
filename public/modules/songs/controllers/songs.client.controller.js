@@ -1,10 +1,17 @@
 'use strict';
 
 // Songs controller
-angular.module('songs').controller('SongsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Songs', 'UnratedSongs' , '$http', '$mdDialog', '$mdToast','songsService',
-	function($scope, $stateParams, $location, Authentication, Songs, UnratedSongs, $http, $mdDialog, $mdToast, songsService) {
+angular.module('songs').controller('SongsController', ['$scope', '$rootScope', '$stateParams', '$location', 'Authentication', 'Songs', 'UnratedSongs' , '$http', '$mdDialog', '$mdToast','songsService',
+	function($scope, $rootScope, $stateParams, $location, Authentication, Songs, UnratedSongs, $http, $mdDialog, $mdToast, songsService) {
 		$scope.authentication = Authentication;
-
+		
+		
+	    // Userchanged
+		$scope.$on('unratedSongChanged', function(songs) {
+			//$scope.unratedSongs = songs;
+			$scope.find();	  
+		});
+		
 		/*--------------------------------------
 		Scope variables - general functions
 		--------------------------------------*/
@@ -232,8 +239,8 @@ angular.module('songs').controller('SongsController', ['$scope', '$stateParams',
 
 			$scope.myPromise =	$http.post('/createmusicxmatch/' + $scope.newTrackID + '?status=' + $scope.addStatus  )
 		        .success(function(response) {
-					$scope.showMessage('Song added successfuly! Press (F5) to refresh :-)');
-					$scope.find();	          
+			 		$rootScope.$broadcast('unratedSongChanged', response);		
+					$scope.showMessage('Song added successfuly!');      
 		        })
 		        .error(function(response) {
 					$scope.showMessage(response.message);		 
@@ -242,5 +249,84 @@ angular.module('songs').controller('SongsController', ['$scope', '$stateParams',
 
 
 
+		/*---------------------------------------------
+		DIALOG EDIT SONG
+		----------------------------------------------*/
+	
+		$scope.showSongDialog = function(songID, ev, song) {
+			//list songs
+			$scope.song = Songs.get({songId: songID}, function(){
+				
+				
+		
+					$mdDialog.show({
+					clickOutsideToClose: true,
+					controller: SongDialogController,
+					templateUrl: 'modalSong.tmpl.html',
+					parent: angular.element(document.body), 
+					targetEvent: ev,
+					locals: {
+						items: $scope.song
+						},
+					})
+					.then(function(response) {
+					
+						// Update existing Song
+						var song = $scope.song;
+			
+						song.$update(function() {
+							//$location.path('songs/' + song._id);
+						}, function(errorResponse) {
+							$scope.error = errorResponse.data.message;
+						});
+		
+						
+						
+					
+					}, function() {
+					$scope.alert = 'You cancelled the dialog.';
+					});
+			
+			});	//
+		};
+
+
+
+
+
+
+
+
+
+
 	} //end of module
 ]);
+
+
+function SongDialogController($scope, $mdDialog, items) {
+  
+  //$scope.setlistName = '';
+  $scope.song = items;
+  //$scope.selected = [];
+  
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.save = function() {
+    $mdDialog.hide($scope.song);
+  };
+  
+  $scope.modalAddToExistingSetlist = function(item) {
+  	var response = {setlist:item, name:null} ;
+    $mdDialog.hide(response);
+  };
+  
+  $scope.modalAddtoNewSetlist = function(){
+	 var response = {setlist:null, name:$scope.setlistName} ;
+	 $mdDialog.hide(response);
+  };
+  	
+}
