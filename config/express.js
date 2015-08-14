@@ -22,7 +22,7 @@ var fs = require('fs'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path'),
-	cors = require('cors');
+	//cors = require('cors');
 	
 	
 module.exports = function(db) {
@@ -116,7 +116,7 @@ module.exports = function(db) {
 	app.use(express.static(path.resolve('./public')));
 	
 	
-	app.use(cors());
+	//app.use(cors());
 	
 	
 	//app.use(permitCrossDomainRequests);
