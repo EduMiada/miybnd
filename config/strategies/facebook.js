@@ -4,11 +4,11 @@
  * Module dependencies.
  */
  
- /*
+ 
 var passport = require('passport'),
 	url = require('url'),
-	//FacebookStrategy = require('passport-facebook').Strategy,
-	FacebookStrategy = require('passport-spotify').Strategy,
+	FacebookStrategy = require('passport-facebook').Strategy,
+	//FacebookStrategy = require('facebook').Strategy,
 	config = require('../config'),
 	users = require('../../app/controllers/users.server.controller');
 
@@ -42,4 +42,4 @@ module.exports = function() {
 			users.saveOAuthUserProfile(req, providerUserProfile, done);
 		}
 	));
-};*/
+};
