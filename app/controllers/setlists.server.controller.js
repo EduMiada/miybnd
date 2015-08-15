@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Setlist = mongoose.model('Setlist'),
 	_ = require('lodash'),
-	request = require('Request');
+	request = require('request');
 
 
 var SpotifyClientID = '5063d7fc578d4b928e96e050790860c9';
