@@ -3,6 +3,8 @@
 /**
  * Module dependencies.
  */
+ 
+ /*
 var passport = require('passport'),
 	url = require('url'),
 	//FacebookStrategy = require('passport-facebook').Strategy,
@@ -40,4 +42,4 @@ module.exports = function() {
 			users.saveOAuthUserProfile(req, providerUserProfile, done);
 		}
 	));
-};
+};*/
