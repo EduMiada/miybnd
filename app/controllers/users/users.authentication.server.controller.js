@@ -8,7 +8,7 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	User = mongoose.model('User'),
-	request = require('Request'),
+	request = require('request'),
 	async = require('async');
 
 /**
