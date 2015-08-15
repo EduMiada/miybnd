@@ -25,12 +25,14 @@ exports.createSpotifyPlaylist = function(req, res){
 	var setlistId = setlist._id;
 	var playlistName = setlist.name;
 	var userID = req.user.additionalProvidersData.spotify.id;
+	
+	//console.log(req.user);
 		
 	//SPOTIFY CREDENTIALS
 	var spotifyApi = new SpotifyWebApi({
 		clientId : '5063d7fc578d4b928e96e050790860c9',
 	 	clientSecret : 'f6f4758ea04942668385ab0d4953e014',
-	  	redirectUri : 'http://localhost:3000/auth/spotify/callback'
+	  	redirectUri : '/auth/spotify/callback'
 	});
 
 	//AUTHORIZATION
@@ -83,12 +85,12 @@ exports.updateSpotifyPlaylist = function(req, res){
 	var setlistId = setlist._id;
 	var playlistID = setlist.spotifyPlaylistId;
 	var userID = req.user.additionalProvidersData.spotify.id;
-		
+				
 	//SPOTIFY CREDENTIALS
 	var spotifyApi = new SpotifyWebApi({
 		clientId : '5063d7fc578d4b928e96e050790860c9',
 	 	clientSecret : 'f6f4758ea04942668385ab0d4953e014',
-	  	redirectUri : 'http://localhost:3000/auth/spotify/callback'
+	  	redirectUri : '/auth/spotify/callback'
 	});
 
 	//AUTHORIZATION
@@ -107,22 +109,20 @@ exports.updateSpotifyPlaylist = function(req, res){
 
 	//GET TOKEN AND CREATE PLAYLIST
 	request.post(authOptions, function(error, response, body) {
-		var accessToken = body.access_token;
+		if (error){
+			return res.status(400).send({message: errorHandler.getErrorMessage(error)});	
+		}else{
 		
-		spotifyApi.setAccessToken(accessToken);		
-//			.then(function(data) {
-				//update setlist
-				Setlist.newSpotifyPlaylist(userID, setlistId, playlistID, function(songs ){										  
-			    // Add tracks to the playlist
-			     spotifyApi.replaceTracksInPlaylist(userID, playlistID, songs)
-				 	.then(function(data) {
-	    				res.jsonp(setlist);
-					});
+			var accessToken =  body.access_token;
+			
+			spotifyApi.setAccessToken(accessToken);		
+			Setlist.newSpotifyPlaylist(userID, setlistId, playlistID, function(songs ){										  
+			spotifyApi.replaceTracksInPlaylist(userID, playlistID, songs)
+				.then(function(data) {
+					res.jsonp(setlist);
 				});
-							
-	//		}, function(err) {
-	//			console.log('Something went wrong!', err);
-	//	});
+			});
+		}								
 	});
 	
 }
@@ -139,7 +139,7 @@ exports.followSpotifyPlaylist = function(req, res){
 	var userID = setlist.spotifyOwnerId;
 	
 	
-	console.log ('playlist', playlistID);
+	//console.log ('playlist', playlistID);
 	
 	//SPOTIFY CREDENTIALS
 	var spotifyApi = new SpotifyWebApi({

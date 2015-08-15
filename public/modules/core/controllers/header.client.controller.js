@@ -21,6 +21,12 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 			//$scope.$apply();
 		});
 	
+		// Check if provider is already in use with current user
+		$scope.isConnectedSocialAccount = function(provider) {
+			
+			//alert($scope.user.additionalProvidersData[provider]);
+			return $scope.authentication.user.provider === provider || ($scope.authentication.user.additionalProvidersData && $scope.authentication.user.additionalProvidersData[provider]);
+		};
 	
 		$scope.updateSelectedBand = function(bandID) {
 

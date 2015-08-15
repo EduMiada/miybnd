@@ -21,7 +21,7 @@ module.exports = function() {
 				.populate('selectedBand','name')
 				.exec(function(err, user) {
 
-				//console.log(user);
+				//console.log('locals',  user);
 
 
 				if (err) {

@@ -93,7 +93,7 @@ exports.userBands = function(req, res) {
 	}
 	
 	Band.userBands(userID, selectedBandID, function (bands){
-		console.log(bands);
+		//console.log(bands);
 		res.json(bands);
 	}) ;
 	

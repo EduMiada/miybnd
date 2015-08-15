@@ -52,13 +52,12 @@
 					<li class="divider"></li>
 					<!--spotify-->
 					
-					 
-					<li data-ng-show="!isConnectedSocialAccount('spotify')" data-ng-controller="SettingsController">
+					<li data-ng-show="!isConnectedSocialAccount('spotify')" >
 						<a  href="/auth/spotify">Connect with Spotify</a>
 					</li>
 					
-					<li data-ng-show="isConnectedSocialAccount('spotify')"  data-ng-controller="SettingsController">
-						<a  data-ng-click="removeUserSocialAccount('spotify')">Disconect Spotify</a>
+					<li data-ng-show="isConnectedSocialAccount('spotify')"  >
+						<a  data-ng-click="removeUserSocialAccount('spotify')" data-ng-controller="SettingsController">Disconect Spotify</a>
 					</li>	
 
 					

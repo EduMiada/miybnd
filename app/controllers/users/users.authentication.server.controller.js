@@ -55,8 +55,6 @@ exports.signup = function(req, res) {
 exports.signin = function(req, res, next) {
 	passport.authenticate('local', function(err, user, info) {
 		if (err || !user) {
-			console.log('erro',  err);
-			console.log(user);
 			res.status(400).send(info);
 		} else {
 			
@@ -64,12 +62,13 @@ exports.signin = function(req, res, next) {
 			user.password = undefined;
 			user.salt = undefined;
 			
-
 			req.login(user, function(err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
 
+//console.log('sigin',  user);
+						
 					res.json(user);
 	
 				}
@@ -119,26 +118,6 @@ exports.oauthCallback = function(strategy) {
  * Helper function to save or update a OAuth user profile
  */
 exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
-
-
-/*
-
-var authOptions = {
-      url: 'https://api.spotify.com/v1/users/edumiyada/playlists',
-      headers: {
-        'Authorization': 'Bearer ' + providerData.accessToken
-      },
-	  data:  "{\"name\":\"NewPlaylist\",\"public\":false}",
-      json: true
-    };
-
-	 request.post(authOptions, function(error, response, body) {
-    	console.log(error);
-		  //console.log(response);
-		  console.log(body);
-	 });
-*/
-
 	
 	if (!req.user) {
 		// Define a search query fields

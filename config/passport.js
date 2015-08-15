@@ -28,11 +28,7 @@ module.exports = function() {
 			done(err, user);		
 		});
 		
-	//	User.findOne({
-	//		_id: id//
-//		}, '-salt -password', function(err, user) {
-//			done(err, user);
-//		});
+	
 	});
 
 	// Initialize strategies
