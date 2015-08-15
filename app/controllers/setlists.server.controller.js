@@ -97,7 +97,7 @@ exports.updateSpotifyPlaylist = function(req, res){
    	var authOptions = {
       	url: 'https://accounts.spotify.com/api/token',
       	form: {
-        		refresh_token : req.user.additionalProvidersData.spotify.refreshToken, //req.user.providerData.refreshToken,
+        		refresh_token : req.user.additionalProvidersData.spotify.refreshToken, 
         		grant_type: 'refresh_token'
       	},
       	headers: {

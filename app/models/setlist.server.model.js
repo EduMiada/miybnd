@@ -67,9 +67,9 @@ SetlistSchema.statics.newSpotifyPlaylist = function(userID, setlistID, playlistI
 			//if find the setlist update the playlistID and get songs array
 			if(setlist){				
 				
-				console.log('owner id', setlist.spotifyOwnerId);
+				//console.log('owner id', setlist.spotifyOwnerId);
 				if(!setlist.spotifyOwnerId)	{
-					console.log('aqui ');
+					//console.log('aqui ');
 					setlist.spotifyOwnerId = userID;
 				}
 		
