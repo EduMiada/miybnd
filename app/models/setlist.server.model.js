@@ -78,6 +78,7 @@ SetlistSchema.statics.newSpotifyPlaylist = function(userID, setlistID, playlistI
 				
 				setlist.save(function(err) {
 					if (err) {
+						console.log('setlist:newSpotify:Error', err)
 						callback(err, null)
 					} else {			
 						

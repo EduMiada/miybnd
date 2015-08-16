@@ -110,13 +110,18 @@ exports.updateSpotifyPlaylist = function(req, res){
 	//GET TOKEN AND CREATE PLAYLIST
 	request.post(authOptions, function(error, response, body) {
 		if (error){
+			console.log('error', error);
 			return res.status(400).send({message: errorHandler.getErrorMessage(error)});	
 		}else{
 		
 			var accessToken =  body.access_token;
+			console.log('accesstoken', accessToken);
+			
 			
 			spotifyApi.setAccessToken(accessToken);		
 			Setlist.newSpotifyPlaylist(userID, setlistId, playlistID, function(songs ){										  
+				console.log('songs' ,songs);
+				
 			spotifyApi.replaceTracksInPlaylist(userID, playlistID, songs)
 				.then(function(data) {
 					res.jsonp(setlist);
@@ -229,9 +234,12 @@ exports.update = function(req, res) {
 	var setlist = req.setlist ;
 
 	setlist = _.extend(setlist , req.body);
+	
+	console.log(setlist);
 
 	setlist.save(function(err) {
 		if (err) {
+			console.log('err', err);
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
