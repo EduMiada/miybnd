@@ -125,6 +125,8 @@ exports.updateSpotifyPlaylist = function(req, res){
 			spotifyApi.replaceTracksInPlaylist(userID, playlistID, songs)
 				.then(function(data) {
 					res.jsonp(setlist);
+				}, function(err) {
+				console.log('Something went wrong!', err);
 				});
 			});
 		}								

@@ -84,7 +84,9 @@ SetlistSchema.statics.newSpotifyPlaylist = function(userID, setlistID, playlistI
 						
 						//get song arrays
 						for (var i = 0; i < setlist.songs.length; i++) {				
-							arrSongs.push('spotify:track:' + setlist.songs[i].song.spotify_id);
+							if (setlist.songs[i].song.spotify_id){
+								arrSongs.push('spotify:track:' + setlist.songs[i].song.spotify_id);
+							}
 					    }
 						//callack
 						callback(arrSongs);												
