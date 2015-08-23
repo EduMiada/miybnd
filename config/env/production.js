@@ -29,7 +29,7 @@ module.exports = {
 				'public/lib/ng-mfb/src/mfb-directive.js',
 				'public/lib/ng-sortable/dist/ng-sortable.min.js',
 				'public/lib/moment/min/moment.min.js',
-				'public/lib/angular-moment/angular-moment.min.js'
+				'public/lib/angular-moment/angular-moment.min.js'				
 			]
 		},
 		//, 'public/modules/**/css/*.css'
