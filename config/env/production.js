@@ -10,7 +10,7 @@ module.exports = {
 				'public/lib/mdi/css/materialdesignicons.min.css',
 				'public/lib/ng-sortable/dist/dist/ng-sortable.min.css',
 				'public/lib/ng-sortable/dist/dist/ng-sortable.style.min.css'
-	
+		
 			],
 			js: [
 				'public/lib/jquery/dist/jquery.min.js', 
@@ -18,12 +18,12 @@ module.exports = {
 				'public/lib/angular-resource/angular-resource.js', 
 				'public/lib/angular-cookies/angular-cookies.js', 
 				'public/lib/angular-animate/angular-animate.js', 
+				'public/lib/angular-aria/angular-aria.js',
 				'public/lib/angular-touch/angular-touch.js', 
 				'public/lib/angular-sanitize/angular-sanitize.js', 
 				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
 				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
-				'public/lib/angular-aria/angular-aria.js',
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',			
 				'public/lib/angular-busy/dist/angular-busy.js',
 			    'public/lib/angular-material/angular-material.js',
 				'public/lib/ng-mfb/src/mfb-directive.js',
