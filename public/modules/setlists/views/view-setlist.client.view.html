@@ -13,12 +13,15 @@
 					<a href="https://play.spotify.com/playlist/{{setlist.spotifyPlaylistId}}" target="_blank" ng-show="setlist.spotifyPlaylistId != undefined">
 						<img style="width:15px;height:15px" src="modules/core/img/spotify.png"/>
 					</a>
+					<!--span hide-sm class="badge" data-ng-hide="setlist.songs.length==0" >{{setlist.songs.length}}</span-->
 				</h3>
-					<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
+                <h6 style="line-height: 0.5; color:#fff">Songs: {{setlist.songs.length}} / {{formatDuration(setlist.duration)}} </h6>
+				<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
             </td>
        </tr>
     </table> <!--row-->
   </div>  
+    
   
 <!--end of header-->
 <div   class="container fluid"  id="sortable-container">
@@ -56,8 +59,9 @@
              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
              <td>
   					<h3 style="margin-top:0px; margin-bottom:5px;"><span data-ng-bind="setlist.name"></span> - 
-					
-					<span>{{setlist.songs[currentPage-1].song.name}}</span></h3>
+						<span>{{setlist.songs[currentPage-1].song.name}}</span>
+					</h3>
+					<h6 style="line-height: 0.5; color:#fff">Songs: {{setlist.songs.length}} / {{formatDuration(setlist.duration)}} </h6>
   					<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
             </td>
        </tr>

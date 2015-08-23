@@ -1,11 +1,12 @@
-'use strict';
+//'use strict';
 
 /**
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
-
+	//Song = mongoose.model('Song');
+	
 /**
  * Setlist Schema
  */
@@ -48,7 +49,54 @@ var SetlistSchema = new Schema({
 	
 	spotifyLastUpdate:{
 		type: Date
+	},
+	
+	duration:{
+		type: Number,
+		default: 0
 	}
+});
+
+/**
+ * Hook a pre save method to save the setlist duration
+ */
+SetlistSchema.pre('save', function(next) {
+	var _this = this;
+	var Song = mongoose.model('Song');
+	var songsId = [];
+
+	//if there are no songs returs
+	if(!_this.songs.length){
+		_this.duration = 0;
+		next();
+	}else{
+	//get the songs array
+		for (var i = 0; i < _this.songs.length; i++) {
+			if (_this.songs[i].song._id){
+				songsId.push(_this.songs[i].song._id);	
+			}else{
+				songsId.push(_this.songs[i].song);
+			}
+			
+		}//end loop
+	
+			//aggregate total duration
+		Song.aggregate()
+			.project({length: 1})
+			.match({'_id': { '$in': songsId }})
+			.group({'_id': '1', 'duration': {'$sum':'$length'}})
+			.exec(function(err, result) {
+				if (err){
+					console.log('error', err);
+				}else{
+					_this.duration = result[0].duration;				
+				}
+		
+			next();		
+		
+		}); //end aggregate
+	}//end if
+	
 });
 
 /*

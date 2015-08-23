@@ -234,14 +234,14 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var setlist = req.setlist ;
+	
 
 	setlist = _.extend(setlist , req.body);
 	
-	console.log(setlist);
-
+	
 	setlist.save(function(err) {
 		if (err) {
-			console.log('err', err);
+			//console.log('err', err);
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
@@ -272,6 +272,26 @@ exports.delete = function(req, res) {
  * List of Setlists
  */
 exports.list = function(req, res) { 
+	
+	
+	//var rules = [{'address.city': '1'}, {price: {$gte: 200}}];
+	//var bandId = [{band: req.user.selectedBand}];
+	
+	//Setlist.aggregate()
+	//	.project({_id: 1, name: 1, 'songs':1})
+		////.match({
+    	////month: currentMonth.getMonth() + 1
+		////}).limit(5).sort({
+    	////	created_at: -1
+		////})
+	//	.unwind('songs')
+	//	.group({'_id': '$name', 'song':{'$push':'$songs.song'},  'songCount':{'$sum':1}})
+	//	.exec(function(err, result) {
+	//	console.log('error', err);
+	//	console.log('result', result);		
+	//	});
+	
+	
 	Setlist.find({band:req.user.selectedBand}).sort('-created').populate('user', 'displayName').exec(function(err, setlists) {
 		if (err) {
 			return res.status(400).send({
@@ -281,6 +301,9 @@ exports.list = function(req, res) {
 			res.jsonp(setlists);
 		}
 	});
+	
+	
+	
 };
 
 /**

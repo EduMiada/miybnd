@@ -27,7 +27,9 @@ module.exports = {
 				'public/lib/angular-busy/dist/angular-busy.js',
 			    'public/lib/angular-material/angular-material.js',
 				'public/lib/ng-mfb/src/mfb-directive.js',
-				'public/lib/ng-sortable/dist/ng-sortable.min.js'
+				'public/lib/ng-sortable/dist/ng-sortable.min.js',
+				'public/lib/moment/min/moment.min.js',
+				'public/lib/angular-moment/angular-moment.min.js'
 			]
 		},
 		//, 'public/modules/**/css/*.css'

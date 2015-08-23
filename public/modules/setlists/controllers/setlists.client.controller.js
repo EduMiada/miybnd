@@ -5,13 +5,18 @@ angular.module('setlists').controller('SetlistsController', ['$scope',  '$stateP
 	function($scope, $stateParams, $location, Authentication, Setlists, $mdDialog, $mdToast, Songs, $http) {
 		$scope.authentication = Authentication;
 
-
 		$scope.setlistName = '';
 
 		/*--------------------------------------
 		Scope variables - general functions
 		--------------------------------------*/
 		$scope.viewModePlay = false;
+		
+		$scope.formatDuration = function(value){
+			//alert( moment.duration(100, 'seconds').humanize);
+			return moment.duration(value, 'seconds').humanize();
+		};
+		
 		
 		$scope.showMessage = function (message) {
    			$mdToast.show(
