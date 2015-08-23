@@ -65,7 +65,23 @@ angular.module('setlists').controller('SetlistsController', ['$scope',  '$stateP
 			
 		};
 		
-
+		//Tongle Play mode and get songs full data w lyrics
+		$scope.tonglePlayMode = function(mode){
+			$scope.success = $scope.error = null;
+			
+			if (mode){
+			
+				$http.get('/setlists/songs/' + $scope.setlist._id, { setlistId:  $scope.setlist._id }).success(function(response) {
+					// If successful show success message and clear form
+					$scope.success = true;
+					$scope.setlist = response;
+				}).error(function(response) {
+					$scope.error = response.message;
+				});
+			}else{
+				$scope.findOne();
+			}
+		};
 		
 		/*------------------------------------------
 		PAGE CONTROLER

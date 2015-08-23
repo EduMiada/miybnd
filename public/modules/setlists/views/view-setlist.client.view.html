@@ -16,7 +16,7 @@
 					<!--span hide-sm class="badge" data-ng-hide="setlist.songs.length==0" >{{setlist.songs.length}}</span-->
 				</h3>
                 <h6 style="line-height: 0.5; color:#fff">Songs: {{setlist.songs.length}} / {{formatDuration(setlist.duration)}} </h6>
-				<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
+				<md-switch ng-model="viewModePlay" ng-change="tonglePlayMode(true)" aria-label="Switch 1">Play mode</md-switch>
             </td>
        </tr>
     </table> <!--row-->
@@ -62,7 +62,7 @@
 						<span>{{setlist.songs[currentPage-1].song.name}}</span>
 					</h3>
 					<h6 style="line-height: 0.5; color:#fff">Songs: {{setlist.songs.length}} / {{formatDuration(setlist.duration)}} </h6>
-  					<md-switch ng-model="viewModePlay" aria-label="Switch 1">Play mode</md-switch>
+  					<md-switch ng-model="viewModePlay" ng-change="tonglePlayMode(false)" aria-label="Switch 1">Play mode</md-switch>
             </td>
        </tr>
 	   <tr>

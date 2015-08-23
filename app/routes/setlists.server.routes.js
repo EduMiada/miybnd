@@ -26,6 +26,9 @@ module.exports = function(app) {
 		.put(users.requiresLogin, setlists.hasAuthorization, setlists.update)
 		.delete(users.requiresLogin, setlists.hasAuthorization, setlists.delete);
 
+	app.route('/setlists/songs/:setlistId')
+		.get(setlists.read);
+
 	// Finish by binding the Setlist middleware
 	app.param('setlistId', setlists.setlistByID);
 };

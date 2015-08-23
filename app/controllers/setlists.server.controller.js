@@ -310,16 +310,38 @@ exports.list = function(req, res) {
  * Setlist middleware
  */
 exports.setlistByID = function(req, res, next, id) { 
+	var songFields = '_id name artist key length song_status song_rate';
+	//console.log('index', req.url.indexOf('songs'));
+
+	if (req.url.indexOf('songs')!==-1){	
+		songFields = songFields + ' lyrics tablature notes';
+	}
 
 	Setlist.findById(id, function (err, setlist) {
 	  var opts = [
 	      	 { path: 'user', select: 'displayName' },
-	    	 { path: 'songs.song',  model: 'Song'} ];
+	    	 { path: 'songs.song', select: songFields,  model: 'Song'} ];
 	
 	Setlist.populate(setlist, opts, function (err, setlist) {
 		if (err) return next(err);
-		if (! setlist) return next(new Error('Failed to load Setlist ' + id));
-		
+		if (! setlist) return next(new Error('Failed to load Setlist ' + id));	
+		req.setlist = setlist ;
+		next();
+    
+	  });
+	});	
+};
+
+
+exports.readSongs = function(req, res, next, id) { 
+	Setlist.findById(id, function (err, setlist) {
+	  var opts = [
+	      	 { path: 'user', select: 'displayName' },
+	    	 { path: 'songs.song', model: 'Song'} ];
+	
+	Setlist.populate(setlist, opts, function (err, setlist) {
+		if (err) return next(err);
+		if (! setlist) return next(new Error('Failed to load Setlist ' + id));	
 		req.setlist = setlist ;
 		next();
     
