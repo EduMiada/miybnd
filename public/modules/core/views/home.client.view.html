@@ -1,11 +1,12 @@
 <section data-ng-show="authentication.user"  data-ng-controller="HomeController" style="background:#428bca; height:100%">
+<span us-spinner></span>
 
 	<section  data-ng-init="showHelp($event)" data-ng-controller="SettingsController"></section>
 
 
 		<!-- ==== HEADERWRAP ==== -->
 		<div id="headerwrap" id="home" name="home" data-ng-controller="SongsController">			
-			<div cg-busy="{promise:myPromise,message:'Adding song, please wait...',backdrop:false,delay:300,minDuration:700}"></div>		
+			<!--div cg-busy="{promise:myPromise,message:'Adding song, please wait...',backdrop:false,delay:300,minDuration:700}"></div-->		
 			<div flash-message="5000" ></div>
 
 			<fieldset data-ng-init="addStatus='Unrated'" >

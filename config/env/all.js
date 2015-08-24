@@ -38,7 +38,13 @@ module.exports = {
 				'public/lib/ng-mfb/src/mfb-directive.js',
 				'public/lib/ng-sortable/dist/ng-sortable.min.js',
 				'public/lib/moment/min/moment.min.js',
-				'public/lib/angular-moment/angular-moment.min.js'
+				'public/lib/angular-moment/angular-moment.min.js',
+				'public/lib/spin.js/spin.js',
+				'public/lib/angular-spinner/angular-spinner.min.js',
+				'public/lib/angular-loading-spinner/angular-loading-spinner.js'
+				
+				
+				
 				//'public/lib/angular-flash-alert/dist/angular-flash.js'
 
 				

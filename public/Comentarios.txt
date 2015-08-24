@@ -1,5 +1,7 @@
 Novos components js para deploy
 
 bower install --save
-- moment 
-- angularMoment
+
+    spin.js
+    angular-spinner.js
+    angular-loading-spinner.js
