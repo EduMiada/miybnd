@@ -1,7 +1,5 @@
 Novos components js para deploy
 
-bower install --save
+bower ng-file-upload install --save
 
-    spin.js
-    angular-spinner.js
-    angular-loading-spinner.js
+ 

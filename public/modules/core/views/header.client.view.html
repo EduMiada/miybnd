@@ -32,10 +32,18 @@
 				<a href="/#!/signin">Sign In</a>
 			</li>
 		</ul>
+		
+		
+		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
+			<li >
+				<img ng-src="{{authentication.user.avatar}}" class="img-circle navbar-brand" style="height:52px;width:52px;"  alt="" ng-click="modalAvatar(this)" ng-controller="SettingsController"/>
+			</li>
+		</ul>
+		
 		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-					<i class="mdi mdi-account"></i>
+					
 					<span data-ng-bind="authentication.user.firstName"></span>, {{authentication.user.selectedBand.name}}<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">

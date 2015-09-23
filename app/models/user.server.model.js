@@ -108,6 +108,14 @@ var UserSchema = new Schema({
 		name:{type:String}
 	}],
 	
+	avatar: {
+		type: String
+	},
+	
+	avatarPreview: {
+		type: String
+	},
+	
 	spotifyAuthCode: String
 });
 

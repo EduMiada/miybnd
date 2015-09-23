@@ -5,10 +5,21 @@
  */
 var passport = require('passport');
 
+
+
 module.exports = function(app) {
 	// User Routes
 	var users = require('../../app/controllers/users.server.controller');
 
+	
+	
+	
+	//api routes
+	
+	app.route('/v1/api/authenticate').post(users.signin_API);
+
+	app.route('/v1/api/users/:userId/bands').get(users.checkToken_API, users.listBands);
+	
 
 
 	// Setting up the users profile api

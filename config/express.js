@@ -22,7 +22,9 @@ var fs = require('fs'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
-	//cors = require('cors');
+	
+	var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+	var cors = require('cors');
 	
 	
 module.exports = function(db) {
@@ -41,6 +43,11 @@ module.exports = function(db) {
 	app.locals.facebookAppId = config.facebook.clientID;
 	app.locals.jsFiles = config.getJavaScriptAssets();
 	app.locals.cssFiles = config.getCSSAssets();
+
+	//token
+	app.set('superSecret', config.secret); // secret variable
+
+
 
 	// Passing the request url to environment locals
 	app.use(function(req, res, next) {
@@ -116,10 +123,19 @@ module.exports = function(db) {
 	app.use(express.static(path.resolve('./public')));
 	
 	
-	//app.use(cors());
+	app.use(cors());
 	
 	
 	//app.use(permitCrossDomainRequests);
+
+	
+	//app.use(function(req, res, next) {
+	//res.header("Access-Control-Allow-Origin", "*");
+	//res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	//next();
+	//});
+
+
 
 	// Globbing routing files
 	config.getGlobbedFiles('./app/routes/**/*.js').forEach(function(routePath) {

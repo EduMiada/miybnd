@@ -117,12 +117,35 @@ angular.module('users').controller('SettingsController', ['$scope', '$rootScope'
 				});
 			}
 		};
+
+		$scope.modalAvatar = function (ev) {
+				$mdDialog.show({
+				  clickOutsideToClose: true,
+				  escapeToClose: true,
+				  controller: UserDialogController,
+				  templateUrl: 'modalUserAvatar.tmpl.html',
+				  parent: angular.element(document.body), 
+				  targetEvent: ev,
+				})
+				.then(function(response) {
+				   
+					if (response){
+						$scope.user.showHelp = true;	
+						$scope.updateUserProfile(true);
+					}
+				
+				}, function() {
+				  $scope.alert = 'You cancelled the dialog.';
+				});
+		};
+
 		
 		
 	}
 ]);
 
-function UserDialogController($scope, $mdDialog) {
+
+function UserDialogController($scope, $mdDialog, Upload, $timeout) {
   
   $scope.hide = function() {
     $mdDialog.hide();
@@ -134,5 +157,29 @@ function UserDialogController($scope, $mdDialog) {
   $scope.modalShow = function(value){
 	 $mdDialog.hide(true);
   };
+
+  $scope.uploadFiles = function(file) {
+        $scope.f = file;
+        if (file && !file.$error) {
+            file.upload = Upload.upload({
+                url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                file: file
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+
+            file.upload.progress(function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+        }   
+    }
+
   		
 }

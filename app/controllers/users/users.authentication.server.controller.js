@@ -9,7 +9,116 @@ var _ = require('lodash'),
 	passport = require('passport'),
 	User = mongoose.model('User'),
 	request = require('request'),
-	async = require('async');
+	async = require('async'),
+	jwt    = require('jsonwebtoken'), // used to create, sign, and verify tokens
+	config = require('../../../config/config'),
+	Band = mongoose.model('Band');
+
+
+
+
+/*
+API CODE
+*/
+
+exports.apiList = function(req, res, next) {
+	
+		res.json({
+				success: true,
+				message: 'API RESPONSE!',
+		});
+		
+		//next();
+			
+};
+
+exports.signin_API = function(req, res, next) {
+	console.log('aqui autenticacao');
+	passport.authenticate('local', function(err, user, info) {
+		if (err || !user) {
+			res.status(400).send(info);
+		} else {
+
+			user.password = undefined;
+			user.salt = undefined;	
+			
+			// create a token
+			var token = jwt.sign(user, config.secret, {
+				expiresInMinutes: 1440 // expires in 24 hours
+			});
+	
+			var userID = user._id;
+			var selectedBandID = user.selectedBand._id;
+			
+			//console.log(user);
+			
+			
+			Band.userBands(userID, selectedBandID, function (bands){
+				user.bands = [];
+				user.bands = bands;
+				//console.log(user);
+							// return the information including token as JSON
+				res.json({
+					success: true,
+					token: token,
+					data: user
+				});	
+
+			}) ;
+	
+	
+	
+		}   
+		
+		})	(req, res, next);		
+};
+
+
+
+
+	
+// route middleware to verify a token
+exports.checkToken_API = function(req, res, next) {
+	
+		// check header or url parameters or post parameters for token
+		var token = req.body.token || req.query.token || req.headers['x-access-token'];
+		
+		// decode token
+		if (token) {
+			// verifies secret and checks exp
+			jwt.verify(token, config.secret, function(err, decoded) {      
+			if (err) {
+				return res.json({ success: false, message: 'Failed to authenticate token.' });    
+			} else {
+				// if everything is good, save to request for use in other routes
+				
+				req.user = decoded;    
+				next();
+			}
+			});
+		
+		} else {
+		
+			// if there is no token
+			// return an error
+			return res.status(403).send({ 
+				success: false, 
+				message: 'No token provided.' 
+			});
+			
+		}
+
+};
+	
+	
+	
+	
+	
+	
+
+
+
+
 
 /**
  * Signup
@@ -67,8 +176,8 @@ exports.signin = function(req, res, next) {
 					res.status(400).send(err);
 				} else {
 
-//console.log('sigin',  user);
-						
+					//console.log('sigin',  user);
+	
 					res.json(user);
 	
 				}

@@ -12,6 +12,97 @@ var mongoose = require('mongoose'),
 	request = require('request'),
 	htmlparser = require('htmlparser2');
 
+
+
+
+/*
+API
+
+*/
+
+	exports.list_api = function(req, res) { 
+		var filterType =  Number(req.query.filterType);
+		var filter =['New','Work in Process', 'Ready to Rock!'];
+	
+		if (filterType === 2){
+			filter =['Unrated'];		
+		}
+	
+		if (filterType === 3){
+			filter =['Backlog'];		
+		}
+
+		//console.log(filter);
+		Song.find({ 'song_status': { $in: filter}, 'band':req.band._id } ).sort('-created')
+					.populate('user', 'displayName')
+					.exec(function(err, song) {
+			if (err) {
+				
+				console.log(err);
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+					
+				});
+			} else {
+				console.log(song);
+				res.jsonp(song);
+			}
+		});
+		
+		
+		
+	};
+
+
+
+	/*--------------------------------------------------------
+	  Rate and unrated related code
+	--------------------------------------------------------- */
+
+	//rate the song and return a list of unrated songs
+	exports.suggestionFeedback = function(req, res) { 
+	
+		var song = req.song ;
+		var rate =  Number(req.query.rateNumber);
+		
+		Song.addUserRate(song._id, req.user._id, rate, function( err, song) {	
+			if (err) {
+				return res.status(400).send({message: errorHandler.getErrorMessage(err)});
+			} 
+			else {
+				return res.status(200).send({message: 'Your Feedback was saved!'});
+			}
+		}); //song.addUserRate callback
+		
+	};//end function
+
+	
+	//list all songs not rated by the current user
+	exports.suggestions = function(req, res) { 
+		Song.find({ song_status : 'Unrated', 'user_rate._id' : { $ne: req.user._id}, 'band': req.band._id } ).sort('-created').populate('user', 'displayName').exec(function(err, song) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp({count:song.length, data:song} );
+			}
+		});
+	};
+	
+	exports.getSong = function(req, res) {
+		res.jsonp({data:req.song});
+	};
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * Create a Song
 	 */
@@ -55,10 +146,15 @@ var mongoose = require('mongoose'),
 	exports.update = function(req, res) {
 		var song = req.song ;
 	
-		song = _.extend(song , req.body);
-	
-		//console.log(song);
-	
+		delete song.loaded;
+
+		//if updating via API the song json will be on body		
+		if (req.body.song){
+			song = _.extend(song , req.body.song);		
+		}else{
+			song = _.extend(song , req.body);		
+		}
+		
 		song.save(function(err) {
 			if (err) {
 				return res.status(400).send({
@@ -111,10 +207,14 @@ var mongoose = require('mongoose'),
 			//		])
 					.exec(function(err, song) {
 			if (err) {
+				
+				console.log(err);
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
+					
 				});
 			} else {
+				console.log(song);
 				res.jsonp(song);
 			}
 		});

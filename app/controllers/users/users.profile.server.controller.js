@@ -10,6 +10,30 @@ var _ = require('lodash'),
 	User = mongoose.model('User'),
 	Band = mongoose.model('Band');
 
+
+/**
+ * list user bands
+ */
+exports.listBands = function(req, res) {
+	// Init Variables
+	var userID = req.user._id;
+	var selectedBandID = req.user.selectedBand._id;
+	//res.json({user:userID, band:selectedBandID});
+	///console.log('userID', userID);
+	//console.log('SelectedBand', selectedBandID);
+
+	//console.log('USer', req.user);
+
+	
+	Band.userBands(userID, selectedBandID, function (bands){
+		res.json(bands);
+	}) ;
+	
+};
+
+
+
+
 /**
  * Update user details
  */

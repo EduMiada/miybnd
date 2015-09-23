@@ -6,6 +6,9 @@ module.exports = {
 		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
+	
+	secret: 'thesongremainsthesamestill',
+	
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',
@@ -41,7 +44,8 @@ module.exports = {
 				'public/lib/angular-moment/angular-moment.min.js',
 				'public/lib/spin.js/spin.js',
 				'public/lib/angular-spinner/angular-spinner.min.js',
-				'public/lib/angular-loading-spinner/angular-loading-spinner.js'
+				'public/lib/angular-loading-spinner/angular-loading-spinner.js',
+				'public/lib/ng-file-upload/ng-file-upload.min.js'
 				
 				
 				

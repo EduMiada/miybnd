@@ -8,7 +8,12 @@ var passport = require('passport'),
 	User = require('mongoose').model('User');
 
 module.exports = function() {
+	
+	//console.log('passport-local');
+	
 	// Use local strategy
+	
+	
 	passport.use(new LocalStrategy({
 			usernameField: 'username',
 			passwordField: 'password'

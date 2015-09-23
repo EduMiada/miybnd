@@ -32,7 +32,8 @@ module.exports = {
 				'public/lib/angular-moment/angular-moment.min.js',
 				'public/lib/spin.js/spin.js',
 				'public/lib/angular-spinner/angular-spinner.min.js',
-				'public/lib/angular-loading-spinner/angular-loading-spinner.js'
+				'public/lib/angular-loading-spinner/angular-loading-spinner.js',
+				'public/lib/ng-file-upload/ng-file-upload.min.js'
 			]
 		},
 		//, 'public/modules/**/css/*.css'

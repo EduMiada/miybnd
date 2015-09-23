@@ -5,7 +5,7 @@ var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'miybnd';
 	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 
-		'ui.utils','cgBusy','ngMaterial','ngAria','ng-mfb', 'as.sortable', 'angularMoment', 'ngLoadingSpinner'];
+		'ui.utils','cgBusy','ngMaterial','ngAria','ng-mfb', 'as.sortable', 'angularMoment', 'ngLoadingSpinner', 'ngFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {

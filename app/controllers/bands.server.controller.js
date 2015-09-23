@@ -119,7 +119,7 @@ exports.bandByID = function(req, res, next, id) {
 	Band.populate(band, opts, function (err, band) {
 		if (err) return next(err);
 		if (! band) return next(new Error('Failed to load Band ' + id));
-		console.log(band);
+	//	console.log(band);
 		
 		req.band = band ;
 		next();

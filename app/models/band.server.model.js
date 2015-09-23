@@ -66,11 +66,20 @@ BandSchema.statics.userBands = function(userID, selectedBandID, callback) {
 		if (err) {
 				console.log(err);
 		} else {
+			 
+			 console.log('ID', selectedBandID);
+			   
 		   for (var i = 0; i < bands.length; i++) {
+			   
+			   
 				var selected = false;
-				if (bands[i]._id === selectedBandID){
+				if (bands[i]._id.toString() === selectedBandID.toString()){
 					selected = true;
 				}
+				
+				console.log(bands[i]);
+				console.log('selected:', selected);
+				
 				
 				var item = {
 				  '_id':bands[i]._id, 
