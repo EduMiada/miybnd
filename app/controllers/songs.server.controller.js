@@ -38,13 +38,13 @@ API
 					.exec(function(err, song) {
 			if (err) {
 				
-				console.log(err);
+				//console.log(err);
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
 					
 				});
 			} else {
-				console.log(song);
+				//console.log(song);
 				res.jsonp(song);
 			}
 		});
@@ -264,13 +264,13 @@ exports.addFromMusixMatch = function(req, res, next){
 					.exec(function(err, song) {
 			if (err) {
 				
-				console.log(err);
+			//	console.log(err);
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
 					
 				});
 			} else {
-				console.log(song);
+				//console.log(song);
 				res.jsonp(song);
 			}
 		});

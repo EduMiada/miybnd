@@ -1,6 +1,5 @@
 Novos components js para deploy
 
-bower ng-file-upload install --save
 
 
 google gcm
