@@ -8,7 +8,9 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	User = mongoose.model('User'),
-	Band = mongoose.model('Band');
+	Band = mongoose.model('Band'),
+	jwt    = require('jsonwebtoken'), // used to create, sign, and verify tokens
+	config = require('../../../config/config');
 
 
 /**
@@ -31,6 +33,47 @@ exports.listBands = function(req, res) {
 	
 };
 
+/**
+ * list user bands
+ */
+exports.setCurrentBand = function(req, res) {
+	// Init Variables
+	var newCurrentBandID = req.body.newCurrentBand;
+	
+	User.setCurrentBand(req.user._id, newCurrentBandID, function(updated){
+		if (updated){
+				User.findById(req.user._id).populate('selectedBand','name').exec(function(err, user) {
+				if (err) {					
+					res.status(400).send(err);
+				}else {
+					user.password = undefined;
+					user.salt = undefined;	
+					
+					// create a token
+					var token = jwt.sign(user, config.secret, {
+						expiresInMinutes: 1440 // expires in 24 hours
+					});
+			
+					var userID = user._id;
+					var selectedBandID = user.selectedBand._id;
+					
+					Band.userBands(userID, selectedBandID, function (bands){
+						user.bands = [];
+						user.bands = bands;
+
+						res.json({
+							success: true,
+							token: token,
+							data: user
+						});	
+		
+					}); //end userband
+					
+				} //end if
+			}); //find user
+		}//end if updated
+	}); //end setcurrentband	
+};
 
 
 
@@ -43,7 +86,7 @@ exports.update = function(req, res) {
 	var message = null;
 	var selectedBandID = null;
 	
-	console.log(user);
+	//console.log(user);
 	
 	try{
 		selectedBandID = req.body.selectedBand._id ;

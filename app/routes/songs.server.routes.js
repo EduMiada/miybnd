@@ -33,7 +33,8 @@ module.exports = function(app) {
 		.post( songs.queryMusixMatch)
 		.get( songs.queryMusixMatch);
 
-
+	app.route('/v1/api/:bandId/songs/addmusicxmatch/:trackId')
+		.post(users.checkToken_API, songs.addFromMusixMatch);
 
 
 

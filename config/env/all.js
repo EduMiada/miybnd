@@ -8,6 +8,9 @@ module.exports = {
 	},
 	
 	secret: 'thesongremainsthesamestill',
+	gcm_sender_key: '543966572181',
+	gcm_server_key: 'AIzaSyA5Jkzsl1CnUWcitCbI0_YwqcdGip0oKh0',
+	
 	
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',

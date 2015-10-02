@@ -21,14 +21,14 @@ API
 */
 
 	exports.list_api = function(req, res) { 
-		var filterType =  Number(req.query.filterType);
+		var filterStatus =  req.query.status;
 		var filter =['New','Work in Process', 'Ready to Rock!'];
 	
-		if (filterType === 2){
+		if (filterStatus === 'unrated'){
 			filter =['Unrated'];		
 		}
 	
-		if (filterType === 3){
+		if (filterStatus === 'backlog'){
 			filter =['Backlog'];		
 		}
 
@@ -49,9 +49,65 @@ API
 			}
 		});
 		
-		
-		
 	};
+
+
+exports.addFromMusixMatch = function(req, res, next){
+	
+		var status = req.query.status;
+		var track = req.track ;
+		var bandId = req.band._id;
+		
+		track = _.extend(track , req.body);
+		
+		//console.log(req.user);
+		//console.log(req.band);
+		//console.log(track);
+	
+		//verifica se a musica ja existe na base
+		Song.find({ name : track.track_name, band : bandId} ).sort('-created').exec(function(err, sng) {		
+		
+			if (!sng.length){
+				
+				var song = new Song({
+					name: track.track_name,
+					artist: track.artist_name,
+					user  : req.user._id,
+					band : bandId,
+					spotify_id : track.track_spotify_id,
+					musixmatch_id : track.track_id,
+					source_name : 'MUSIXMATCH',
+					external_rating: track.track_rating,
+					length: track.track_length,
+					external_url: track.track_share_url,
+					song_image: track.track_image,
+					song_image_350: track.track_image_350,
+					song_image_500: track.track_image_500,
+					lyrics: req.lyrics_body,
+					song_status: status
+				});
+	
+				//console.log(music);
+	
+				song.save(function(err) {
+					if (err) {
+						//console.log(err);
+						res.status(400).send({
+							message: (err.message)
+						});
+					} else {
+						res.jsonp(song);
+					}
+				});
+	
+				
+			}else{
+				res.status(409).send({message: 'Song already exists'});
+			}
+		});
+	
+	};
+	
 
 
 
@@ -278,12 +334,13 @@ API
 					   		'track_name': tracks[track].track.track_name,
 					   		'artist_name': tracks[track].track.artist_name,
 					   		'album_name': tracks[track].track.album_name,
-					   		'album_coverart': tracks[track].album_coverart_100x100
+					   		'album_coverart': tracks[track].track.album_coverart_100x100,
+							'album_coverart1': tracks[track].track.album_coverart_350x350
 						});
 	
 						//console.log(tracks[track].album_coverart_100x100);
 					}
-					//console.log(tracks.length);
+					//console.log(list);
 			    	res.send(list);
 		        }
 		    });
@@ -304,28 +361,55 @@ API
 	        var jsonObject = JSON.parse(body);
 		    var track = jsonObject.message.body.track;
 			
-	//		console.log(track);
+			//console.log(track);
 	
 			callback(error, track);
 	        });
 	    },
 	  	function(track, callback) {
-	      var url = track.album_coverart_100x100;
+	     var url = track.album_coverart_100x100;
+		 
+		 //get the first image 100 
 	      request({ url: url, encoding: null }, function(error, response, body) {
 	        track.track_image = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
-	        callback(error, track);
-	      });
+	    	
+				//get the second image
+				var url2 = track.album_coverart_350x350;
+				request({ url: url2, encoding: null }, function(error, response, body) {
+	        		track.track_image_350 = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
+		
+		
+					//get the third image
+					var url3 = track.album_coverart_500x500;
+					request({ url: url3, encoding: null }, function(error, response, body) {
+						track.track_image_500 = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
+			
+		    			callback(error, track);
+					});
+					
+				});
+	      });		  
 	
 	    },
 	    function(track, callback) {
 	    	//var url = 'http://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=937dd267ce7fecd3922af964be92cc3c&track_id=' + id + '&format=json';
-	    	var url= track.track_share_url; //'https://www.musixmatch.com/pt-br/letras/Pearl-Jam/Alive'
+	    	//var url= track.track_share_url; //'https://www.musixmatch.com/pt-br/letras/Pearl-Jam/Alive'
 			var track_lyrics = 'No lyrics';
-	
+				
+			var options = {
+  				url: track.track_share_url ,
+				headers: {
+					'User-Agent': 'request'
+				}
+			};
+			
+			//url = 'https://www.musixmatch.com/';
 			//console.log('url-----------------------------');
 			//console.log(url);
+			//request.flushHeaders();
+
 	
-	  		request.get(url, function(error, response, body) {
+	  		request.get(options, function(error, response, body){
 	        //if (error) return next
 	
 	
@@ -395,7 +479,7 @@ API
 		
 		track = _.extend(track , req.body);
 		
-		//console.log(req.user);
+		//console.log(track);
 	
 		//verifica se a musica ja existe na base
 		Song.find({ name : track.track_name, band : req.user.selectedBand} ).sort('-created').exec(function(err, sng) {		

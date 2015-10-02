@@ -79,6 +79,14 @@ var SongSchema = new Schema({
 	song_image: {
 		type: String
 	},
+	
+	song_image_350: {
+		type: String
+	},
+
+	song_image_500: {
+		type: String
+	},
 
 	song_status: {type: String,
 			enum: ['Unrated', 'Backlog','New','Work in Process', 'Ready to Rock!'],

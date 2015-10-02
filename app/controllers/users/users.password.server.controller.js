@@ -59,7 +59,9 @@ exports.forgot = function(req, res, next) {
 				name: user.displayName,
 				appName: config.app.title,
 				url: 'http://' + req.headers.host + '/auth/reset/' + token
+				
 			}, function(err, emailHTML) {
+				console.log(emailHTML);
 				done(err, emailHTML, user);
 			});
 		},

@@ -17,6 +17,7 @@ module.exports = function(app) {
 	//api routes
 	
 	app.route('/v1/api/authenticate').post(users.signin_API);
+	app.route('/v1/api/users/:userId/currentband').put(users.checkToken_API,users.setCurrentBand);
 
 	app.route('/v1/api/users/:userId/bands').get(users.checkToken_API, users.listBands);
 	

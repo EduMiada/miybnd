@@ -2,4 +2,13 @@ Novos components js para deploy
 
 bower ng-file-upload install --save
 
+
+google gcm
  
+Server API Key
+help
+AIzaSyA5Jkzsl1CnUWcitCbI0_YwqcdGip0oKh0
+
+
+Sender ID
+543966572181

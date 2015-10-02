@@ -23,6 +23,12 @@ var validateLocalStrategyPassword = function(password) {
 	return (this.provider !== 'local' || (password && password.length > 6));
 };
 
+/*convert string to lower case*/
+function toLower (v) {
+  return v.toLowerCase();
+}
+
+
 /**
  * User Schema
  */
@@ -54,7 +60,8 @@ var UserSchema = new Schema({
 		type: String,
 		unique: 'testing error message',
 		required: 'Please fill in a username',
-		trim: true
+		trim: true,
+		set: toLower
 	},
 	password: {
 		type: String,
@@ -119,6 +126,9 @@ var UserSchema = new Schema({
 	spotifyAuthCode: String
 });
 
+
+
+
 /**
  * Hook a pre save method to hash the password
  */
@@ -170,5 +180,42 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 		}
 	});
 };
+
+
+/*
+UPDATE USERS CURRENT BANDS
+*/
+UserSchema.statics.setCurrentBand = function(userID, selectedBandID, callback) {
+	var _this = this;
+	var bandObjectID = mongoose.Types.ObjectId(selectedBandID);
+	//var userObjectID = mongoose.Types.ObjectId(userID);
+	
+	_this.findById(userID, '_id, selectedBand').exec(function(err, user) {
+		
+		if (!user) {
+				console.log(err);
+		} else {
+			//console.log('newBandID', bandObjectID);
+			if (bandObjectID){
+				user.selectedBand = bandObjectID;			
+			}
+			//console.log('updateband', user);
+			user.save(function(err) {
+					if (err) {
+						console.log(err);
+						callback(false);							
+					} else {
+						
+						callback(true);
+					}
+			});
+			
+		}
+				
+	});
+};
+
+
+
 
 mongoose.model('User', UserSchema);

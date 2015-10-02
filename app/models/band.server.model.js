@@ -70,7 +70,8 @@ BandSchema.statics.userBands = function(userID, selectedBandID, callback) {
 			 console.log('ID', selectedBandID);
 			   
 		   for (var i = 0; i < bands.length; i++) {
-			   
+				
+				if (!selectedBandID)  selectedBandID = bands[i]._id; 
 			   
 				var selected = false;
 				if (bands[i]._id.toString() === selectedBandID.toString()){

@@ -33,7 +33,7 @@ exports.apiList = function(req, res, next) {
 };
 
 exports.signin_API = function(req, res, next) {
-	console.log('aqui autenticacao');
+	//console.log('aqui autenticacao');
 	passport.authenticate('local', function(err, user, info) {
 		if (err || !user) {
 			res.status(400).send(info);

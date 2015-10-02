@@ -22,7 +22,7 @@ module.exports = function() {
 			//console.log(username);
 			
 			//User.findOne({username: username}, function(err, user) {
-			User.findOne({username: username})
+			User.findOne({username: username.toLowerCase()})
 				.populate('selectedBand','name')
 				.exec(function(err, user) {
 
