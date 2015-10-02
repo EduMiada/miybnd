@@ -370,25 +370,70 @@ exports.addFromMusixMatch = function(req, res, next){
 	     var url = track.album_coverart_100x100;
 		 
 		 //get the first image 100 
-	      request({ url: url, encoding: null }, function(error, response, body) {
-	        track.track_image = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
-	    	
-				//get the second image
-				var url2 = track.album_coverart_350x350;
-				request({ url: url2, encoding: null }, function(error, response, body) {
-	        		track.track_image_350 = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
-		
-		
-					//get the third image
-					var url3 = track.album_coverart_500x500;
-					request({ url: url3, encoding: null }, function(error, response, body) {
-						track.track_image_500 = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
+		 
+		 //se nao tiver 1 url sai
+		 if(!url){
+			callback(null, track);	 
+			 
+		 }else{
+			//primeira imagem
+			request({ url: url, encoding: null }, function(error, response, body) {
+				if (!error){
+					track.track_image = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');	
 			
-		    			callback(error, track);
-					});
+					//get the second image
+					var url2 = track.album_coverart_350x350;
 					
-				});
-	      });		  
+					//se tem url seg image
+					if (url2){					
+						request({ url: url2, encoding: null }, function(error, response, body) {
+							
+							//sem erro na segunda
+							if (!error){
+								track.track_image_350 = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');					
+			
+									//get the third image
+									var url3 = track.album_coverart_500x500;
+								
+									//se tem url seg image
+									if (url3){	
+										request({ url: url3, encoding: null }, function(error, response, body) {
+											if (!error){
+												track.track_image_500 = 'data:' + response.headers['content-type'] + ';base64,' + body.toString('base64');
+											}
+									
+											callback(error, track);
+											
+										}); //fecha 3 request
+									}else{ //se noativer 3 url
+										callback(error, track);
+									} 
+									
+							}else { //sem erro 2 request
+								callback(error, track);	//erro na chamada 2						
+							}
+						}); //fecha 2 request
+			
+					}else {//fecha 2 url
+						callback(error, track);	//nao tem imagem 2	
+					}
+				}else{ //fecha erro 1 -- se  for erro 1 sai
+						// se nao tiver a segunda imagem ja sai 
+					callback(error, track);
+				}	
+			});//fecha callback
+				
+		
+			 
+		 } //if primeira url
+		 
+		 
+	    	
+				
+		
+					
+			//	});
+	      //});		  
 	
 	    },
 	    function(track, callback) {
