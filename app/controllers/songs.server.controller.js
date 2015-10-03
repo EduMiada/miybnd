@@ -33,7 +33,7 @@ API
 		}
 
 		//console.log(filter);
-		Song.find({ 'song_status': { $in: filter}, 'band':req.band._id } ).sort('-created')
+		Song.find({ 'song_status': { $in: filter}, 'band':req.band._id }, '_id name artist song_status song_image' ).sort('-created')
 					.populate('user', 'displayName')
 					.exec(function(err, song) {
 			if (err) {
