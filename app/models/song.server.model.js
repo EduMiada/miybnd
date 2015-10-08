@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
 	Band = mongoose.model('Band'),
+	FeedItem = mongoose.model('FeedItem'),
 	Schema = mongoose.Schema;
 
 /**
@@ -136,7 +137,7 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 	_this.findById(songID).exec(function(err, song) {     //populate('user', 'displayName').exec(function(err, song) {
 		if (song) {
 			
-			console.log('find Ok')
+			//console.log('find Ok')
 			
 			//user already rated so update and keep the status
 			for (var i = 0; i < song.user_rate.length; i++) {
@@ -148,8 +149,7 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 				calculatedRate += song.user_rate[i].rate;
 			} //loop
 
-			
-
+		
 			//add the user rate to the song and update status if needed			
 			if (!rateChanged){
 				song.user_rate.push({_id: userID, user:userID, rate: songRate}) ;
@@ -182,10 +182,20 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 					song.save(function(err) {
 						if (err) {
 							callback(err, null);
-							console.log('save err ' + err);
+							//console.log('save err ' + err);
 						} 
 						else {
-							console.log('save ok');
+							//add a new song feed				
+							FeedItem.addSongFeed(song, userID, function(err, item) {	
+								if (err) {
+									console.log('SONG FEED ITEM ERROR:', err)
+									//return res.status(400).send({message: errorHandler.getErrorMessage(err)});
+								} 
+								else {
+									console.log('SONG FEED ITEM SUCCESS')
+								}
+							}); //FEED ITEM NEW  callback
+												
 							callback(null, song);
 						}
 					}); //song.save callback
@@ -193,34 +203,11 @@ SongSchema.statics.addUserRate = function(songID, userID, songRate, callback) {
 			} //rate changed if
 		}else{
 			callback (err,null);
-			console.log('erro find')
+			//console.log('erro find')
 			
 		}
 	}); //findbyId callback
 }; //end function
-
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
