@@ -11,8 +11,8 @@ module.exports = {
         callbackURL: "/auth/spotify/callback"
     },
 	facebook: {
-		clientID: process.env.FACEBOOK_ID || 'APP_ID',
-		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
+		clientID: '162584200776112' || 'APP_ID',
+		clientSecret: '99cbd345ef5002f60e56e89b9d5eb4a9' || 'APP_SECRET',
 		callbackURL: '/auth/facebook/callback'
 	},
 	twitter: {

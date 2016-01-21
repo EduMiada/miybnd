@@ -19,14 +19,9 @@ var _ = require('lodash'),
 exports.listBands = function(req, res) {
 	// Init Variables
 	var userID = req.user._id;
-	var selectedBandID = req.user.selectedBand._id;
-	//res.json({user:userID, band:selectedBandID});
-	///console.log('userID', userID);
-	//console.log('SelectedBand', selectedBandID);
-
-	//console.log('USer', req.user);
-
-	
+	var selectedBandID = 0;
+    if (req.user.selectedBand)  selectedBandID = req.user.selectedBand._id;
+	 
 	Band.userBands(userID, selectedBandID, function (bands){
 		res.json(bands);
 	}) ;
@@ -55,7 +50,8 @@ exports.setCurrentBand = function(req, res) {
 					});
 			
 					var userID = user._id;
-					var selectedBandID = user.selectedBand._id;
+					var selectedBandID = 0;
+                    if(user.selectedBand) selectedBandID = user.selectedBand._id;
 					
 					Band.userBands(userID, selectedBandID, function (bands){
 						user.bands = [];
@@ -89,7 +85,9 @@ exports.update = function(req, res) {
 	//console.log(user);
 	
 	try{
-		selectedBandID = req.body.selectedBand._id ;
+                        
+        if(req.body.selectedBand) selectedBandID = req.body.selectedBand._id ;
+		
 	}catch(err){
 		//console.log('no band selected');
 	}

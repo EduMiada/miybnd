@@ -36,7 +36,7 @@
 		
 		<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
 			<li >
-				<img ng-src="{{authentication.user.avatar}}" class="img-circle navbar-brand" style="height:52px;width:52px;"  alt="" ng-click="modalAvatar(this)" ng-controller="SettingsController"/>
+				<img ng-src="{{authentication.user.picture_small}}" class="img-circle navbar-brand" style="height:52px;width:52px;"  alt="" ng-click="modalAvatar(this)" ng-controller="SettingsController"/>
 			</li>
 		</ul>
 		
@@ -70,6 +70,22 @@
 
 					
 					<!--spotify-->
+                    
+                    <!--facebook-->
+					
+					<li data-ng-show="!isConnectedSocialAccount('facebook')" >
+						<a  href="/auth/facebook">Connect with Facebook</a>
+					</li>
+					
+					<li data-ng-show="isConnectedSocialAccount('facebook')"  >
+						<a  data-ng-click="removeUserSocialAccount('facebook')" data-ng-controller="SettingsController">Disconect Facebook</a>
+					</li>	
+
+					
+                    <!--facebook-->
+                    
+                    
+                    
 					<li class="divider"></li>
 					<li>
 						<a href="/auth/signout">Signout</a>

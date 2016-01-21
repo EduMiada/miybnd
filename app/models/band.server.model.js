@@ -31,7 +31,12 @@ var BandSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
-	}
+	},
+    
+    personal:{
+        type: Boolean,
+        default:false
+    }
 });
 
 
@@ -66,9 +71,7 @@ BandSchema.statics.userBands = function(userID, selectedBandID, callback) {
 		if (err) {
 				console.log(err);
 		} else {
-			 
-			 console.log('ID', selectedBandID);
-			   
+			 			   
 		   for (var i = 0; i < bands.length; i++) {
 				
 				if (!selectedBandID)  selectedBandID = bands[i]._id; 

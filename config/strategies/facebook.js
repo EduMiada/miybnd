@@ -8,16 +8,16 @@
 var passport = require('passport'),
 	url = require('url'),
 	FacebookStrategy = require('passport-facebook').Strategy,
-	//FacebookStrategy = require('facebook').Strategy,
 	config = require('../config'),
 	users = require('../../app/controllers/users.server.controller');
 
 module.exports = function() {
 	// Use facebook strategy
 	passport.use(new FacebookStrategy({
-			clientID: config.spotify.clientID,
-			clientSecret: config.spotify.clientSecret,
-			callbackURL: config.spotify.callbackURL,
+			clientID: config.facebook.clientID,
+            clientSecret: config.facebook.clientSecret,
+			callbackURL: config.facebook.callbackURL,
+            profileFields: ['emails'],
 			passReqToCallback: true
 		},
 		function(req, accessToken, refreshToken, profile, done) {
@@ -26,6 +26,9 @@ module.exports = function() {
 			providerData.accessToken = accessToken;
 			providerData.refreshToken = refreshToken;
 
+
+             console.log(profile);
+
 			// Create the user OAuth profile
 			var providerUserProfile = {
 				firstName: profile.name.givenName,
@@ -33,10 +36,14 @@ module.exports = function() {
 				displayName: profile.displayName,
 				email: profile.emails[0].value,
 				username: profile.username,
-				provider: 'spotify',
+				provider: 'facebook',
 				providerIdentifierField: 'id',
 				providerData: providerData
 			};
+            
+            
+             console.log('depois provider');
+
 
 			// Save the user OAuth profile
 			users.saveOAuthUserProfile(req, providerUserProfile, done);

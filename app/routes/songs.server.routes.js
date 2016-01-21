@@ -5,6 +5,13 @@ module.exports = function(app) {
 	var songs = require('../../app/controllers/songs.server.controller');
 	var bands = require('../../app/controllers/bands.server.controller');
 
+	
+
+
+	app.route('/v1/api/ppm/projects')
+		.get(songs.getPPMProjects);
+	
+
 	app.route('/v1/api/songs')
 		.get(songs.list_api);
 		

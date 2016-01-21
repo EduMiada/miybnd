@@ -12,7 +12,11 @@ var _ = require('lodash'),
 	async = require('async'),
 	jwt    = require('jsonwebtoken'), // used to create, sign, and verify tokens
 	config = require('../../../config/config'),
-	Band = mongoose.model('Band');
+	Band = mongoose.model('Band'),
+    async = require('async'),
+    querystring = require('querystring'),
+    SpotifyWebApi = require('spotify-web-api-node');
+
 
 
 
@@ -48,7 +52,8 @@ exports.signin_API = function(req, res, next) {
 			});
 	
 			var userID = user._id;
-			var selectedBandID = user.selectedBand._id;
+			var selectedBandID = 0;
+            if(user.selectedBand) selectedBandID = user.selectedBand._id;
 			
 			//console.log(user);
 			
@@ -56,7 +61,7 @@ exports.signin_API = function(req, res, next) {
 			Band.userBands(userID, selectedBandID, function (bands){
 				user.bands = [];
 				user.bands = bands;
-				//console.log(user);
+				console.log(user);
 							// return the information including token as JSON
 				res.json({
 					success: true,
@@ -111,11 +116,407 @@ exports.checkToken_API = function(req, res, next) {
 };
 	
 	
-	
-	
-	
+//route to signin with facebook client token got from client app
+//will transform de short token to long live token
+//check if user exists and create and return a app token
+exports.facebookClientToken_API = function(req, res, next){
+    
+    // check header or url parameters or post parameters for token
+    var clientToken = req.body.token || req.query.token || req.headers['x-access-token'];
+    
+    //exchange the token with server
+    var url = 'https://graph.facebook.com';
+       
+    var post_data = '/oauth/access_token?grant_type=fb_exchange_token';
+    post_data = post_data + '&client_id=' + config.facebook.clientID;
+    post_data = post_data + '&client_secret=' + config.facebook.clientSecret;
+    post_data = post_data + '&fb_exchange_token=' +  clientToken;
+
+    request.get(url + post_data, function(error, response, data) {
+        if (error) {
+            console.log('ERROR', error);
+            next();
+        }
+        else {
+         
+            console.log('chando profile', data);
+         
+            getFacebookProfile(url, data, function(err, profile){
+                if (!profile){
+                    console.log('erro', err);
+                } else{   
+                    createLoginFacebookUser(req, profile, function(error, user) {
+                        if(error){
+                            console.log(error);
+                        }else{  
+                            
+                            user.password = undefined;
+                            user.salt = undefined;	
+                            
+                            // create a token
+                            var token = jwt.sign(user, config.secret, {
+                                expiresInMinutes: 1440 // expires in 24 hours
+                            });
+                    
+                            var userID = user._id;
+                            var selectedBandID = 0;
+                            
+                            if (user.selectedBand)  selectedBandID = user.selectedBand._id;
+                            
+                            Band.userBands(userID, selectedBandID, function (bands){
+                                user.bands = [];
+                                user.bands = bands;
+
+                                res.json({
+                                    success: true,
+                                    token: token,
+                                    data: user
+                                });	
+
+                            }) ;
+                    
+                        }
+                    });
+                }
+            });
+        }
+    });
+    
+};
+
+//Parse the user profile data and get user picture profile based on the new long time token
+function getFacebookProfile(url, data, callback){
+    var parsedResponse = querystring.parse(data);
+    var access_token = parsedResponse.access_token;
+    var expires = parsedResponse.expires;  
+    var post_data = '/me?fields=name,first_name,last_name,email,picture&access_token=' + access_token;
+
+    //call me api
+    request.get(url + post_data, function(error, response, data) {
+
+        if (error) {
+            console.log('Error getFacebookProfile', error);
+            callback(error, null);
+        }
+        else {
+            if ('string' == typeof data) {
+                var json = JSON.parse(data);
+            }
+
+            var profile = {};
+                profile.provider = 'facebook';
+                profile.id = json.id;
+                profile.username = json.id;
+                profile.displayName = json.name;
+                profile.name = json.name;
+                profile.firstName = json.first_name;
+                profile.lastName = json.last_name;
+                profile.profileUrl = 'https://graph.facebook.com/me';
+                profile.providerIdentifierField = 'id';
+                profile.accessToken = access_token;
+                profile.expires = expires;
+                profile.picture = undefined;
+                profile.providerData = {id: profile.id , accessToken:profile.accessToken, expires:profile.expires, profileUrl:profile.profileUrl};
+              
+            
+            
+            if (!json.picture) {
+                callback(null, profile);
+            }else{
+                if (typeof json.picture == 'object' && json.picture.data) {
+                    getFacebookProfilePicture(json.picture.data.url, function(err, image){
+                        if(image){
+                            profile.picture = image;                   
+                        }  
+                         callback(null, profile);
+                    });
+                }
+            }
+        }
+            
+    });
+}
+    
+
+//Parse the user profile picture
+function getFacebookProfilePicture(url, callback){
+    var request = require('request').defaults({ encoding: null });
+
+    request.get(url, function (error, response, body) {
+        if(error || response.statusCode ==! 200){
+            callback(error,  null);
+        }else {
+            var image  = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+            callback(null,  image);
+        }
+     });
+
+};
+
+/**
+ * Helper function to save or update a OAuth user profile
+ */
+function createLoginFacebookUser (req, providerUserProfile, callback) {
+    
+	if (!req.user) {
+        
+        console.log('user',providerUserProfile);  
+        
+		// Define a search query fields
+		var searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;
+		var searchAdditionalProviderIdentifierField = 'additionalProvidersData.' + providerUserProfile.provider + '.' + providerUserProfile.providerIdentifierField;
+
+		// Define main provider search query
+		var mainProviderSearchQuery = {};
+		mainProviderSearchQuery.provider = providerUserProfile.provider;
+		mainProviderSearchQuery[searchMainProviderIdentifierField] = providerUserProfile.providerData[providerUserProfile.providerIdentifierField];
+
+		// Define additional provider search query
+		var additionalProviderSearchQuery = {};
+		additionalProviderSearchQuery[searchAdditionalProviderIdentifierField] = providerUserProfile.providerData[providerUserProfile.providerIdentifierField];
+
+        console.log('Main Search Provider', mainProviderSearchQuery);
+        console.log('additional Search Provider', additionalProviderSearchQuery);
+
+		// Define a search query to find existing user with current provider profile
+		var searchQuery = {
+			$or: [mainProviderSearchQuery, additionalProviderSearchQuery]
+		};
+
+		User.findOne(searchQuery, function(err, user) {
+			if (err) {
+				return callback(err);
+			} else {
+				if (!user) {
+					var possibleUsername = providerUserProfile.username || ((providerUserProfile.email) ? providerUserProfile.email.split('@')[0] : '');
+
+					User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
+						user = new User({
+							firstName: providerUserProfile.firstName,
+							lastName: providerUserProfile.lastName,
+							username: availableUsername,
+							displayName: providerUserProfile.displayName,
+							email: providerUserProfile.email,
+							provider: providerUserProfile.provider,
+                            picture: providerUserProfile.picture,
+                            picture_small: providerUserProfile.picture,
+							providerData: providerUserProfile.providerData,
+                            selectedBand: undefined
+						});
+
+						// And save the user
+						user.save(function(err, user) {
+                            return callback(err, user);    
+						});
+					});
+				} else {
+					return callback(err, user);
+				}
+			}
+		});
+	}
+};
+
+
+
+
+
+exports.connectSpotifyAccount_API = function(req, res){
+   
+    
+    var clientToken = req.body.spotifyprofile || req.query.spotifyprofile;
+    
+    console.log('client token',clientToken);
+    //var json = JSON.parse(clientToken);
+  
+    console.log('log json', clientToken.code);
+  
+    var params=[];
+        params['code'] = clientToken.code;
+        params['client_id'] = config.spotify.clientID;
+        params['client_secret']=config.spotify.clientSecret;
+        params['grant_type'] ='authorization_code';
+        params['redirect_uri']= 'http://localhost/callback';
+        
+    var post_data = querystring.stringify(params);
+   
+   	var authOptions = {
+      	url: 'https://accounts.spotify.com/api/token?' + post_data ,
+      	headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+      	}
+    };
+
+    request.post(authOptions, function(error, body, response) {
+        
+        if (error){
+         	res.json({success: false, error:error});
+        } 
+        else {
+            if ('string' == typeof response) {
+                response = JSON.parse(response);
+            }
+            
+            
+            var providerData = profile._json;
+			providerData.accessToken = accessToken;
+			providerData.refreshToken = refreshToken;
+
+
+
+			/*// Create the user OAuth profile
+			var providerUserProfile = {
+				firstName: profile.displayName,
+				//lastName: profile.name.familyName,
+				displayName: profile.displayName,
+				email: profile.emails[0].value,
+				username: profile.username,
+				provider: 'spotify',
+				providerIdentifierField: 'id',
+				providerData: providerData,
+				code:req.query.code
+			};
+
+			// Save the user OAuth profile
+			users.saveOAuthUserProfile(req, providerUserProfile, done);
+            */
+            console.log(response);
+                console.log(response.access_token);
+            //var results = JSON.parse(body);
+            //var access_token = results.access_token;
+            //var refresh_token = results.refresh_token;  
+            //delete results.refresh_token; 
+        }
+    });
+      
+      
+      
+      res.json('{data:1}');
+};
+
+  
 	
 
+	
+
+
+
+exports.connectSpotifyAccount_API_NEW = function(req, res){
+   
+  //  console.log('iniciando chamada api spotify')
+    getSpotifyProfileFromCode(req, function(err, data){
+        if (err){
+    //        console.log('Erro Spotify', err);
+            res.json({success: false, token: req.user.token, data: null});	
+        }else{
+      //      console.log('Spotify OK', data);
+            res.json({success: true,token: req.user.token,data: data});	
+        }
+    });
+       
+       
+};
+
+function getSpotifyProfileFromCode(req, callback){
+    
+    var clientToken = req.body.spotifyprofile || req.query.spotifyprofile;
+  
+    var spotifyApi = new SpotifyWebApi({
+        clientId : config.spotify.clientID,
+        clientSecret : config.spotify.clientSecret,
+        redirectUri :'http://localhost/callback'
+    });
+    
+    var providerData = {};
+
+    // First retrieve an access token
+    spotifyApi.authorizationCodeGrant(clientToken.code)
+    .then(function(data) {
+        var result = data.body;
+    
+        if ('string' == typeof result) {
+            result = JSON.parse(result);
+        }
+
+        providerData.accessToken = result.access_token;
+        providerData.refreshToken = result.refresh_token;
+
+    
+        // Set the access token
+        spotifyApi.setAccessToken(result.access_token);
+
+        // Use the access token to retrieve information about the user connected to it
+        return spotifyApi.getMe();
+    })
+    .then(function(data) {
+        var result = data.body;
+        if ('string' == typeof result) {
+            result = JSON.parse(result);
+        }
+       
+        result.accessToken = providerData.accessToken;
+        result.refreshToken = providerData.refreshToken;
+
+        updateSpotifyProfile(req, result, function(err, user){
+           // console.log('retorno callback update');
+            return callback (err, user);        
+        });
+        
+    
+        
+    });
+
+};
+
+
+
+
+
+
+/**
+ * Helper function to update a OAuth user profile with spotify
+ */
+function updateSpotifyProfile (req, providerUserProfile, callback) {
+    
+    if(req.user){
+        User.findOne({_id: req.user._id}).select({_id: 1, additionalProvidersData: 1 }).exec(function(err, user) {
+		  
+            if (err) return callback(err, null);
+    
+            providerUserProfile.provider = 'spotify';
+
+            if (user.provider !== providerUserProfile.provider && (!user.additionalProvidersData || !user.additionalProvidersData[providerUserProfile.provider])) {
+                if (!user.additionalProvidersData) user.additionalProvidersData = {};
+                user.additionalProvidersData[providerUserProfile.provider]=providerUserProfile;
+
+                // Then tell mongoose that we've updated the additionalProvidersData field
+                user.markModified('additionalProvidersData');
+
+            //    console.log('update spotify after markmodified');
+
+                // And save the user
+                user.save(function(err) {
+                    req.user.additionalProvidersData = user.additionalProvidersData;
+                    return callback (null, req.user);
+                });
+
+
+            }else{
+                return callback (null, req.user);
+            }
+
+
+
+    	});
+      
+        
+
+
+    
+    }       
+            
+    //return callback (null, user);
+};
 
 
 
@@ -207,6 +608,8 @@ exports.oauthCallback = function(strategy) {
 			
 		passport.authenticate(strategy, function(err, user, redirectURL) {
 			
+            console.log('auth err', err);
+            
 			if (err || !user) {
 				return res.redirect('/#!/signin');
 			}
@@ -228,6 +631,9 @@ exports.oauthCallback = function(strategy) {
  */
 exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 	
+    console.log('user',providerUserProfile);
+    
+    
 	if (!req.user) {
 		// Define a search query fields
 		var searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;
@@ -241,6 +647,11 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 		// Define additional provider search query
 		var additionalProviderSearchQuery = {};
 		additionalProviderSearchQuery[searchAdditionalProviderIdentifierField] = providerUserProfile.providerData[providerUserProfile.providerIdentifierField];
+
+
+        console.log('Main Search Provider', mainProviderSearchQuery);
+
+        console.log('additional Search Provider', additionalProviderSearchQuery);
 
 		// Define a search query to find existing user with current provider profile
 		var searchQuery = {

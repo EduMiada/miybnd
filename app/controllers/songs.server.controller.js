@@ -13,6 +13,28 @@ var mongoose = require('mongoose'),
 	htmlparser = require('htmlparser2');
 
 
+/*TESTE*/
+
+  exports.getPPMProjects = function(req, res){
+    
+	//var auth =  'Basic ' + window.btoa('admin:test');
+	
+	var options = {
+		url: 'http://ppmpresales74.ca.com/ppm/rest/v1/projects' ,
+		headers: {
+            'Content-Type' : 'application/json',
+            'Authorization': 'Basic YWRtaW46dGVzdA=='
+		}
+	};
+	
+	request.get(options, function(error, response, body){
+		res.jsonp(body);
+	});			
+
+	
+  }
+
+
 
 
 /*

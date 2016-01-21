@@ -115,6 +115,14 @@ var UserSchema = new Schema({
 		name:{type:String}
 	}],
 	
+    picture: {
+		type: String
+	},
+    
+    picture_small: {
+		type: String
+	},
+
 	avatar: {
 		type: String
 	},
@@ -123,7 +131,19 @@ var UserSchema = new Schema({
 		type: String
 	},
 	
-	spotifyAuthCode: String
+	spotifyAuthCode: String,
+    
+    about: String,
+    city:String,
+    area:String,
+    zipcode:String,
+    soundcloud:String,
+    youtube:String,
+    styles:String,
+    influency:String,
+    instrument:String,
+    experience:String,
+    bio:String
 });
 
 
@@ -133,13 +153,42 @@ var UserSchema = new Schema({
  * Hook a pre save method to hash the password
  */
 UserSchema.pre('save', function(next) {
-	if (this.password && this.password.length > 6) {
+	
+     this.wasNew = this.isNew;
+     if (this.password && this.password.length > 6) {
 		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
 		this.password = this.hashPassword(this.password);
 	}
+    
+    if (this.wasNew) { 
+        var band = new Band();
+        band.name = 'Personal';
+        band.user =   this;
+        band.personal = true;
+        band.members.push({'admin': 1, member: band.user});
 
-	next();
+        band.save(function(err) {            
+            if (err) {
+                console.log('Error Creating Personal Band', err);
+            } else{
+                console.log('banda incluida') ;
+                next();
+            }
+        });
+    }
+    
+    next();
 });
+
+
+//always create a new personal band to user if its new
+UserSchema.post('save', function (next) {   
+   /* if (this.wasNew) {
+        
+    }
+    */
+});
+
 
 /**
  * Create instance method for hashing a password

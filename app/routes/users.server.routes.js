@@ -15,12 +15,14 @@ module.exports = function(app) {
 	
 	
 	//api routes
-	
+	//authenticate and get user by user/pass or facebook oauth with accessToken
 	app.route('/v1/api/authenticate').post(users.signin_API);
 	app.route('/v1/api/users/:userId/currentband').put(users.checkToken_API,users.setCurrentBand);
-
+    app.route('/v1/api/auth/facebook').post(users.facebookClientToken_API);
 	app.route('/v1/api/users/:userId/bands').get(users.checkToken_API, users.listBands);
-	
+    app.route('/v1/api/auth/facebook').post(users.facebookClientToken_API);
+
+    app.route('/v1/api/users/:userId/connectspotify').post(users.checkToken_API, users.connectSpotifyAccount_API_NEW);
 
 
 	// Setting up the users profile api
@@ -42,9 +44,7 @@ module.exports = function(app) {
 	app.route('/auth/signout').get(users.signout);
 
 	// Setting the facebook oauth routes
-	app.route('/auth/facebook').get(passport.authenticate('facebook', {
-		scope: ['email']
-	}));
+	app.route('/auth/facebook').get(passport.authenticate('facebook', {scope: ['email']}));
 	app.route('/auth/facebook/callback').get(users.oauthCallback('facebook'));
 	
 	// Setting the SPOTIFY oauth routes
