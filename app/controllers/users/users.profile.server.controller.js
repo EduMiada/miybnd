@@ -28,6 +28,47 @@ exports.listBands = function(req, res) {
 	
 };
 
+
+/**
+ * Set user picture
+ */
+exports.picture = function(req, res) {
+	// check header or url parameters or post parameters for picture
+	var pic = req.body.picture || req.query.picture;
+    
+    
+    console.log(req.user);
+	
+    if(req.user){
+        User.findOne({_id: req.user._id}).select({_id: 1, picture:1 }).exec(function(err, user) {
+		  
+            if (err){
+                return res.status(401).send({message: 'couldn´t save the picture ' + err});    
+            } 
+            
+            user.picture = pic;
+            
+            user.save(function(err) {
+                res.json({success: true, data: user});	
+            });
+
+
+
+    	});
+      
+        
+
+
+    
+    }else{
+        return res.status(401).send({message: 'User not logged in'});    
+    }       
+    
+    
+};
+
+
+
 /**
  * list user bands
  */

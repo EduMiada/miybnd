@@ -24,10 +24,16 @@ module.exports = function(app) {
 
     app.route('/v1/api/users/:userId/connectspotify').post(users.checkToken_API, users.connectSpotifyAccount_API_NEW);
 
+    //set user profile picture
+    app.route('/v1/api/users/:userId/picture').post(users.checkToken_API, users.picture);
+
+
 
 	// Setting up the users profile api
 	app.route('/users/me').get(users.me);
 	app.route('/users').put(users.update);
+   
+
 	app.route('/users/accounts').delete(users.removeOAuthProvider);
 	app.route('/users/:userId/bands').get(users.userBands);
 
