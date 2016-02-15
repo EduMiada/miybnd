@@ -29,6 +29,72 @@ exports.listBands = function(req, res) {
 };
 
 
+
+ //set user profile picture
+exports.getProfile = function(req, res) {
+    
+    if(req.user){    
+        User.findOne({_id: req.user._id}).select({_id: 1, profile: 1, contact:1, channels:1 }).exec(function(err, user) {      
+            if (err){
+                return res.status(401).send({message: err});                            
+            }
+            res.json({success: true, data: user});	
+        });
+    }else{
+        return res.status(401).send({message: 'User not logged in'});    
+    }           
+};
+
+
+ //set user profile picture
+exports.updateProfile = function(req, res) {
+	// check header or url parameters or post parameters for picture
+	var profile = req.body.profile || req.query.profile;
+    var contact = req.body.contact || req.query.contact;
+    var channels = req.body.channels || req.query.channels;
+    
+    if(req.user && (profile || contact || channels)){
+    
+        User.findOne({_id: req.user._id}).select({_id: 1, profile: 1, contact:1, channels:1 }).exec(function(err, user) {
+		  
+            if (!user.profile) user.profile = {};
+            if (!user.contact) user.contact = {};
+            if (!user.channels) user.channels = {};
+            
+            if(profile){
+                user.profile = profile;
+                user.markModified('profile');                
+            }
+
+            if(contact){
+                user.contact = contact;
+                user.markModified('contact');                
+            }
+
+            if(channels){
+                user.channels = channels;
+                user.markModified('channels');                
+            }
+
+            // And save the user
+            user.save(function(err) {
+                
+                if (err){
+                    return res.status(401).send({message: err});                            
+                }
+                res.json({success: true, message: 'Update sucessfuly'});	
+            });
+
+        });
+
+    
+    }else{
+        return res.status(401).send({message: 'User not logged in'});    
+    }           
+};
+
+
+
 /**
  * Set user picture
  */

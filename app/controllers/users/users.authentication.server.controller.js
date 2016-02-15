@@ -523,6 +523,46 @@ function updateSpotifyProfile (req, providerUserProfile, callback) {
 
 
 
+/**
+ * Remove OAuth provider
+ */
+exports.removeOAuthProvider_API = function(req, res, next) {
+	var provider = req.param('provider');
+
+	if (req.user && provider) {
+        
+        User.findOne({_id: req.user._id}).select({_id: 1, additionalProvidersData: 1 }).exec(function(err, user) {
+		  
+            if (err) return res.status(400).send({	message: errorHandler.getErrorMessage(err)});
+            
+            // Delete the additional provider
+            if (user.additionalProvidersData[provider]) {
+                delete user.additionalProvidersData[provider];
+
+                // Then tell mongoose that we've updated the additionalProvidersData field
+                user.markModified('additionalProvidersData');
+            }
+
+            user.save(function(err) {
+                if (err) {
+                    return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                } else {
+                    req.login(user, function(err) {
+                        if (err) {
+                            res.status(400).send(err);
+                        } else {
+                            res.json(user);
+                        }
+                    });
+                }
+            });
+        });
+	}
+};
+
+
 
 /**
  * Signup
@@ -722,13 +762,16 @@ exports.removeOAuthProvider = function(req, res, next) {
 	var provider = req.param('provider');
 
 	if (user && provider) {
-		// Delete the additional provider
+		
+        // Delete the additional provider
 		if (user.additionalProvidersData[provider]) {
 			delete user.additionalProvidersData[provider];
 
 			// Then tell mongoose that we've updated the additionalProvidersData field
 			user.markModified('additionalProvidersData');
-		}
+		
+        
+        }
 
 		user.save(function(err) {
 			if (err) {

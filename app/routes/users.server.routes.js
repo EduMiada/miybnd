@@ -23,9 +23,13 @@ module.exports = function(app) {
     app.route('/v1/api/auth/facebook').post(users.facebookClientToken_API);
 
     app.route('/v1/api/users/:userId/connectspotify').post(users.checkToken_API, users.connectSpotifyAccount_API_NEW);
+	app.route('/v1/api/users/:userId/accounts').delete(users.checkToken_API, users.removeOAuthProvider_API);
+
 
     //set user profile picture
     app.route('/v1/api/users/:userId/picture').post(users.checkToken_API, users.picture);
+    app.route('/v1/api/users/:userId/profile').post(users.checkToken_API, users.updateProfile);
+    app.route('/v1/api/users/:userId/profile').get(users.checkToken_API, users.getProfile);
 
 
 

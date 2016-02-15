@@ -11,9 +11,7 @@ var _ = require('lodash'),
  * User middleware
  */
 exports.userByID = function(req, res, next, id) {
-    
-    console.log('user by id', id);
-    
+  
 	User.findOne({_id: id}).populate('selectedBand','name').exec(function(err, user) {
 		if (err) return next(err);
 		if (!user) return next(new Error('Failed to load User ' + id));

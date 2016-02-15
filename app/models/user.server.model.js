@@ -133,6 +133,10 @@ var UserSchema = new Schema({
 	
 	spotifyAuthCode: String,
     
+    profile: {},
+    contact:{},
+    channels:{},
+    
     about: String,
     city:String,
     area:String,
