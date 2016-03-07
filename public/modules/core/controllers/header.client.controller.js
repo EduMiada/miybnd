@@ -10,6 +10,9 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 			$scope.isCollapsed = !$scope.isCollapsed;
 		};
 
+        //console.log('$scope.authentication');
+        
+        
 		// Collapsing the menu after navigation
 		$scope.$on('$stateChangeSuccess', function() {
 			$scope.isCollapsed = false;
@@ -23,9 +26,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 	
 		// Check if provider is already in use with current user
 		$scope.isConnectedSocialAccount = function(provider) {
-			
-			//alert($scope.user.additionalProvidersData[provider]);
-			return $scope.authentication.user.provider === provider || ($scope.authentication.user.additionalProvidersData && $scope.authentication.user.additionalProvidersData[provider]);
+			if ($scope.authentication.user){            
+    			 //alert($scope.user.additionalProvidersData[provider]);
+			     return $scope.authentication.user.provider === provider || ($scope.authentication.user.additionalProvidersData && $scope.authentication.user.additionalProvidersData[provider]);
+            }
 		};
 	
 		$scope.updateSelectedBand = function(bandID) {
