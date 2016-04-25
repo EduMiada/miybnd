@@ -53,6 +53,7 @@ API
 		if (filterStatus === 'backlog'){
 			filter =['Backlog'];		
 		}
+        
 
 		//console.log(filter);
 		Song.find({ 'song_status': { $in: filter}, 'band':req.band._id }, '_id name artist song_status song_image' ).sort('-created')

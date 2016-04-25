@@ -95,11 +95,12 @@ exports.checkToken_API = function(req, res, next) {
 		if (token) {
 			// verifies secret and checks exp
 			jwt.verify(token, config.secret, function(err, decoded) {      
-			if (err) {
+			if (err) {4
+             console.log('check token - erro');
 				return res.json({ success: false, message: 'Failed to authenticate token.' });    
 			} else {
 				// if everything is good, save to request for use in other routes
-				
+				 console.log('check token - ok');
 				req.user = decoded;    
 				next();
 			}
@@ -406,13 +407,13 @@ exports.connectSpotifyAccount_API = function(req, res){
 
 exports.connectSpotifyAccount_API_NEW = function(req, res){
    
-  //  console.log('iniciando chamada api spotify')
+    console.log('iniciando chamada api spotify')
     getSpotifyProfileFromCode(req, function(err, data){
         if (err){
-    //        console.log('Erro Spotify', err);
+            console.log('Erro Spotify', err);
             res.json({success: false, token: req.user.token, data: null});	
         }else{
-      //      console.log('Spotify OK', data);
+           console.log('Spotify OK', data);
             res.json({success: true,token: req.user.token,data: data});	
         }
     });
@@ -431,6 +432,8 @@ function getSpotifyProfileFromCode(req, callback){
     });
     
     var providerData = {};
+    
+    console.log('chamada 100',clientToken);
 
     // First retrieve an access token
     spotifyApi.authorizationCodeGrant(clientToken.code)
@@ -439,11 +442,13 @@ function getSpotifyProfileFromCode(req, callback){
     
         if ('string' == typeof result) {
             result = JSON.parse(result);
+            console.log('chamada 200', result); 
         }
 
         providerData.accessToken = result.access_token;
         providerData.refreshToken = result.refresh_token;
 
+   console.log('chamada 300' ); 
     
         // Set the access token
         spotifyApi.setAccessToken(result.access_token);
@@ -457,6 +462,8 @@ function getSpotifyProfileFromCode(req, callback){
             result = JSON.parse(result);
         }
        
+           console.log('chamada 400', result); 
+           
         result.accessToken = providerData.accessToken;
         result.refreshToken = providerData.refreshToken;
 
