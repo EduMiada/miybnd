@@ -9,21 +9,42 @@ var mongoose = require('mongoose'),
 	User = mongoose.model('User'),
 	_ = require('lodash');
 
+/*API*/
+
+//get band API
+exports.getBand = function(req, res) {
+    if (req.band){
+        Band.findById(req.band._id, function (err, band) {
+        var opts = [
+                { path: 'user', select: 'displayName' },
+                { path: 'members.member', model: 'User', select:'_id displayName pictureSmall'} ];
+        
+            Band.populate(band, opts, function (err, band) {
+                if (err) return  res.status(401).send({message: err});;
+                if (! band) return res.status(401).send({message: 'Failed to load Band ' + req.band._id});
+                res.json({success: true, data: band}) ;
+            });
+        });        
+        
+    }else{
+        return res.status(401).send({message: 'Failed to load Band '});
+    }
+
+};
+
 /**
  * Create a Band
  */
 exports.create = function(req, res) {
 	var band = new Band(req.body);
-	band.user = req.user;
+	band.user =  mongoose.Types.ObjectId(req.user._id); 
 	band.members.push({'admin': 1, member: band.user });
 
 	band.save(function(err) {
 		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
+			return res.status(400).send({message: err});
 		} else {
-			res.jsonp(band);
+			res.jsonp({success: true, data: band});
 		}
 	});
 };
@@ -49,7 +70,7 @@ exports.update = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(band);
+			res.jsonp( {success: true, data: band});
 		}
 	});
 };
@@ -72,11 +93,13 @@ exports.delete = function(req, res) {
 };
 
 /**
- * List of Bands
+ * List of Bands user is member or admin
  */
 exports.list = function(req, res) { 
-	
-	Band.find().sort('-created').populate('user', 'displayName').exec(function(err, bands) {
+    
+    var userObjectID = mongoose.Types.ObjectId(req.user._id);
+
+	Band.find().or([{'members.member':userObjectID}, {'user':userObjectID}]).sort('-created').populate('user', 'displayName').exec(function(err, bands) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -85,24 +108,6 @@ exports.list = function(req, res) {
 			res.jsonp(bands);
 		}
 	});
-};
-
-exports.queryMusixMatch = function(req, res, next){
-	var searchParam = new RegExp(req.params.search, 'i');
-//app.User.find()exec(function(err, users) {
-//    res.json(JSON.stringify(users));
-//});
-	User.find().or([{ 'displayName': { $regex: searchParam }}, 
-					{ 'username': { $regex: searchParam }}]).sort('displayName').exec(function(err, users){
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.send(users);
-		}
-	});
-
 };
 
 
@@ -126,15 +131,27 @@ exports.bandByID = function(req, res, next, id) {
     
 	  });
 	});
-
-  	
-	//Band.findById(id).populate('user', 'displayName').exec(function(err, band) {
-//		if (err) return next(err);/
-		//if (! band) return next(new Error('Failed to load Band ' + id));
-		//req.band = band ;
-	//	next();
-	//});
 };
+
+
+exports.seachNewMembers = function(req, res, next){
+	var searchParam = new RegExp(req.params.search, 'i');
+//app.User.find()exec(function(err, users) {
+//    res.json(JSON.stringify(users));
+//});
+	User.find().or([{ 'displayName': { $regex: searchParam }}, 
+					{ 'username': { $regex: searchParam }}]).sort('displayName').exec(function(err, users){
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.send(users);
+		}
+	});
+
+};
+
 
 /**
  * Band authorization middleware

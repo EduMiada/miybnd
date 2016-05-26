@@ -22,6 +22,7 @@ var BandSchema = new Schema({
 	},
 	members: [{
 		admin: Number,
+        status: Number,
 		member:{
 			type: Schema.ObjectId,
 			ref: 'User'
@@ -36,7 +37,27 @@ var BandSchema = new Schema({
     personal:{
         type: Boolean,
         default:false
-    }
+    },
+    
+    picture: {
+		type: String
+	},
+    
+    picture_small: {
+		type: String
+	},
+    
+    description: {
+		type: String
+	},
+  
+    followers: [{
+		follower:{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}	
+	}],
+	
 });
 
 
